@@ -6,39 +6,38 @@ const verifyToken = require('../utils/verifyToken')
 
 const { JWT_SECRET } = require('../config');
 
-// Ruta para hacer registro
+/* Ruta para hacer registro
 router.post('/register', async (req, res) => {
   const errors = []
-  const { body: data} = req;
-  
-  if (data.password !== data.confirm_password){
-    errors.push('Password must be equal')
-  }
-  if (data.password.length < 4) {
-    errors.push('Password is less than 3 characters')
-  }
-  if (errors.length > 0) {
-    res.send({errors})
-  } else {
-    const findEmail = await User.findOne({email: data.email});
-    if(findEmail) {
-      res.send('Email already exist');
-    } else {
-      const newUser = new User(req.body);
-      await newUser.save();
+  const { email, password, confirm_password } = req.body;
 
-      const token = jwt.sign({id: newUser._id}, JWT_SECRET, {
-        expiresIn: 60 * 60 * 24
-      })
-      res.status(201).send({success: 'ok', token});
+  const isError = register.validation(email, password, confirm_password)
+  if(isError) errors.push(isError)
+
+  if (errors.length > 0) {
+    res.status(200).json({ success: false, errors })
+  } else {
+    const findEmail = await register.duplication(email)
+
+    if(findEmail) {
+      res.status(200).json({ auth: false, token: null, error: findEmail })
+    } else {
+      const newUser = await register.save(req.body)
+      res.status(201).send({
+        success: true,
+        token: newUser.token,
+        data: newUser.data,
+      });
     }
   }
 })
+*/
 
 // Ruta para hacer signin
 router.post('/login', async (req, res) => {
   const { body: data } = req;
   const user = await User.findOne({email: data.email});
+  console.log('email:: ', data.email)
   if(!user) {
     return res.status(403).send("Unauthorizer");
   }
