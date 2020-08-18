@@ -1,14 +1,13 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const router = Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../utils/verifyToken')
 
-const { config } = require('../config');
-
+const { JWT_SECRET } = require('../config');
 
 // Ruta para hacer registro
-router.post('/register', async (req, res, next) => {
+router.post('/register', async (req, res) => {
   const errors = []
   const { body: data} = req;
   
@@ -28,7 +27,7 @@ router.post('/register', async (req, res, next) => {
       const newUser = new User(req.body);
       await newUser.save();
 
-      const token = jwt.sign({id: newUser._id}, config.jwtSecret, {
+      const token = jwt.sign({id: newUser._id}, JWT_SECRET, {
         expiresIn: 60 * 60 * 24
       })
       res.status(201).send({success: 'ok', token});
@@ -37,7 +36,7 @@ router.post('/register', async (req, res, next) => {
 })
 
 // Ruta para hacer signin
-router.post('/login', async (req, res, next) => {
+router.post('/login', async (req, res) => {
   const { body: data } = req;
   const user = await User.findOne({email: data.email});
   if(!user) {
@@ -48,7 +47,7 @@ router.post('/login', async (req, res, next) => {
     res.status(401).json({auth: false, token: null, error: 'Email or passwor are wrong'})
   }
 
-  const token = jwt.sign({id: user._id}, config.jwtSecret, {
+  const token = jwt.sign({id: user._id}, JWT_SECRET, {
     expiresIn: 60 * 60 * 24
   })
   res.status(200).send({auth: true, token})
@@ -56,9 +55,7 @@ router.post('/login', async (req, res, next) => {
 
 
 // Testin
-router.get('/me', verifyToken, async (req, res, next) => {
-
-  
+router.get('/me', verifyToken, async (req, res) => {
   const user = await User.findById(req.userId, {password: 0});
   if(!user) {
     return res.status(401).send('Unauthorizer');
