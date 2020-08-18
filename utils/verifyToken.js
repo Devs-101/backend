@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { config } = require('../config');
+const { JWT_SECRET } = require('../config');
 
 function verifyToken (req, res, next) {
   const token = req.headers['x-access-token'];
@@ -9,7 +9,7 @@ function verifyToken (req, res, next) {
       message: 'No token provided'
     });
   }
-  const decoded = jwt.verify(token, config.jwtSecret);
+  const decoded = jwt.verify(token, JWT_SECRET);
   req.userId = decoded.id;
   next();
 }

@@ -1,12 +1,12 @@
 require('dotenv').config();
 
 const config = {
-  puerto: process.env.APP_PORT,
-  dbUser: process.env.DB_USER,
-  dbPassword: process.env.DB_PASSWD,
-  dbHost: process.env.DB_HOST,
-  dbName: process.env.DB_NAME,
-  jwtSecret: process.env.JWT_SECRET
+  APP_PORT: process.env.APP_PORT,
+  DB_USER: process.env.DB_USER,
+  DB_PASSWD: process.env.DB_PASSWD,
+  DB_HOST: process.env.DB_HOST,
+  DB_NAME: process.env.DB_NAME,
+  JWT_SECRET: process.env.JWT_SECRET
 }
 
-module.exports = { config }
+module.exports = config
