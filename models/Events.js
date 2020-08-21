@@ -32,8 +32,10 @@ const eventsSchema = new Schema({
     type: Boolean,
     default: false
   },
-  date: Date,
-  hour: Date,
+  dateHour: {
+    initDate: Date,
+    endDate: Date
+  },
   theme: {
     type: String,
     // At the moment we accept just 2 omnitrix or cureness!
@@ -56,12 +58,13 @@ const eventsSchema = new Schema({
     type: Boolean,
     default: true
   },
-  allowRegistre:{
+  allowRegister:{
     type: Boolean,
     default: true
   },
   slug: {
-    type: String
+    type: String,
+    unique: true
   },
   fullUrl: {
     type: String
@@ -72,7 +75,10 @@ const eventsSchema = new Schema({
     rol: String
   }],
   bannerOrHeader: {
-    type: Boolean,
+    isBanner: {
+      // True is banner, false is header
+      type: Boolean,
+    },
     text: String,
     image: String
   },
