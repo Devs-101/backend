@@ -1,8 +1,8 @@
 const { Schema, model} = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new Schema({
-  username: {
+const usersSchema = new Schema({
+  name: {
     type: String,
     trim: true
   },
@@ -17,18 +17,21 @@ const userSchema = new Schema({
     type: String,
     required: true,
     trim: true
+  },
+  avatar: {
+    type: String
   }
-});
+}, {timestamps: true});
 
 // Method to hash password
-userSchema.pre('save', async function(next) {
+usersSchema.pre('save', async function(next) {
   const hash = await bcrypt.hash(this.password, 12);
   this.password = hash;
   next();
 });
 
-userSchema.methods.validatePassword = function (password) {
+usersSchema.methods.validatePassword = function (password) {
   return bcrypt.compare(password, this.password);
 }
 
-module.exports = model('User', userSchema);
+module.exports = model('Users', usersSchema);
