@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "jest:watch": "jest --watch",
+    "jest:coverage": "jest --coverage",
     "test:jasmine": "nyc node ./spec/support/specs.js"
   },
   "author": "Raziel Carvajal <razielco@gmail.com>",
@@ -28,6 +30,8 @@
     "morgan": "^1.10.0",
     "nyc": "^15.1.0",
     "jasmine-console-reporter": "^3.1.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "supertest": "^4.0.2",
+    "jest": "^26.4.0"
   }
 }
