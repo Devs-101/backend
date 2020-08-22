@@ -1,22 +1,15 @@
 const User = require('../models/User');
+const Organization = require('../models/Organizations');
 const jwt = require('jsonwebtoken');
 
+
 const { JWT_SECRET } = require('../config');
-
-const registerValidation = (email, password, confirm_password) => {
-  if(!email || !password || !confirm_password) return 'NO_INFO'
-
-  if (password.length < 4) return 'MUST_BE_COMPLETE'
-  if (password !== confirm_password) return 'MUST_BE_EQUAL'
-
-  return false
-}
 
 const registerDuplicationDatabase = async (email) => {
   const findEmail = await User.findOne({ email });
 
   if(findEmail) {
-    return 'EMAIL_ALREADY_EXIST'
+    return true
   }
 
   return false
@@ -24,7 +17,15 @@ const registerDuplicationDatabase = async (email) => {
 
 const registerSave = async (body) => {
   const newUser = new User(body);
+  newUser.name = body.user_name
   await newUser.save();
+
+  const newOrganization = new Organization(body);
+  const user = await User.findById(newUser._id);
+  if(!user) return
+  newOrganization.name = body.organization_name;
+  newOrganization.userId = user._id
+  await newOrganization.save()
 
   const token = jwt.sign({id: newUser._id}, JWT_SECRET, {
     expiresIn: 60 * 60 * 24
@@ -36,19 +37,23 @@ const registerSave = async (body) => {
 }
 
 const register = async (req, res) => {
-  const errors = []
-  const { email, password, confirm_password } = req.body;
-
-  const isError = registerValidation(email, password, confirm_password)
-  if(isError) errors.push(isError)
-
-  if (errors.length > 0) {
-    res.status(200).json({ success: false, errors })
+  const { body: data } = req;
+  if(data.password !== data.confirm) {
+    res.status(422).json({errors: [{value: data.confirm,
+                                  msg: 'Password and confirm must be equals',
+                                  param: 'confirm',
+                                  location: 'body'
+                                }]});
   } else {
-    const findEmail = await registerDuplicationDatabase(email)
-
+    const findEmail = await registerDuplicationDatabase(data.email)
+  
     if(findEmail) {
-      res.status(200).json({ auth: false, token: null, error: findEmail })
+      res.status(200).json({ errors: [{
+        value: data.email,
+        msg: 'Email already exist',
+        param: 'email',
+        location: 'body'
+      }] })
     } else {
       const newUser = await registerSave(req.body)
       res.status(201).send({
@@ -59,6 +64,7 @@ const register = async (req, res) => {
     }
   }
 }
+// }
 
 const login = async (req, res) => {
   const { body: data } = req;
