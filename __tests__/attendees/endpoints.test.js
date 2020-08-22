@@ -10,7 +10,7 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
   const request = testServer(route);
 
   describe(`Routes ${baseMock}`, function () {
-    it('[GET] Should return a collection of ${baseMock}', function(done) {
+    it(`[GET] Should return a collection of ${baseMock}`, function(done) {
       request.get(baseRoute).end((err, res) => {
         expect(res.body).toMatchObject({
           success: expect.any(Boolean),
@@ -21,7 +21,7 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
       });
     });
 
-    it('[POST] Should return a 201 ${baseMock}', function(done) {
+    it(`[POST] Should return a 201 ${baseMock}`, function(done) {
       const createAttendee = {
         _id: '5f3c5f4ada6bed0ff0d50699',
         email: 'juan_pablo@gmail.com',
@@ -35,10 +35,6 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
         });
         done();
       });
-    });
-
-    it('[GET] Should return a 200 with ONE ${baseMock} info', function(done) {
-      request.get(`${baseRoute}/1`).expect(200, done);
     });
 
   });

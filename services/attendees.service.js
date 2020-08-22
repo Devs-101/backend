@@ -27,22 +27,7 @@ const readAllAttendees = async (req, res) => {
   }
 }
 
-const readAttendees = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const attendee = await Controller.getAttendee(id)
-    return res.status(200).send({
-      success: true,
-      data: attendee,
-      route: 'readAttendees'
-    });
-  } catch (error) {
-    console.log('error::', error)
-  }
-}
-
 module.exports = {
   createAttendees,
-  readAllAttendees,
-  readAttendees
+  readAllAttendees
 };

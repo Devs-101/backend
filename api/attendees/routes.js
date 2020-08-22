@@ -4,8 +4,6 @@ const router = Router();
 const {
   createAttendees,
   readAllAttendees,
-  readAttendees,
-  deleteAttendees
 } = require('../../services/attendees.service')
 
 function scheduleRoutes(app) {
@@ -13,8 +11,6 @@ function scheduleRoutes(app) {
 
   router.post('/', createAttendees);
   router.get('/', readAllAttendees);
-  router.get('/:id', readAttendees);
-  router.get('/:id/delete', deleteAttendees);
 
 }
 
