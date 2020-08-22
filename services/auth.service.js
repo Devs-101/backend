@@ -45,58 +45,58 @@ const register = async (req, res) => {
                                   location: 'body'
                                 }]});
   } else {
-    const findEmail = await registerDuplicationDatabase(data.email)
-  
-    if(findEmail) {
-      res.status(200).json({ errors: [{
-        value: data.email,
-        msg: 'Email already exist',
-        param: 'email',
-        location: 'body'
-      }] })
-    } else {
-      const newUser = await registerSave(req.body)
-      res.status(201).send({
-        success: true,
-        token: newUser.token,
-        data: newUser.data,
-      });
+    try {
+      const findEmail = await registerDuplicationDatabase(data.email)
+    
+      if(findEmail) {
+        res.status(200).json({ errors: [{
+          value: data.email,
+          msg: 'Email already exist',
+          param: 'email',
+          location: 'body'
+        }] })
+      } else {
+        const newUser = await registerSave(req.body)
+        res.status(201).send({
+          success: true,
+          token: newUser.token,
+          data: newUser.data,
+        });
+      }      
+    } catch (error) {
+      return error
     }
   }
 }
-// }
 
 const login = async (req, res) => {
   const { body: data } = req;
 
-  const { email, password } = req.body;
-  if(!email || !password ) return res.status(403).send('NO_INFO');
-
-  const user = await User.findOne({ email: data.email });
-
-  if(!user) {
-    return res.status(403).send('Unauthorizer');
-  }
-  const match = await user.validatePassword(data.password);
-  if(!match) {
-    res.status(401).json({
-      auth: false,
-      token: null,
-      error: 'MUST_BE_EQUAL'
-    })
-  }
-
-  const token = jwt.sign({id: user._id}, JWT_SECRET, {
-    expiresIn: 60 * 60 * 24
-  })
-  res.status(200).send({
-    auth: true,
-    token
-  })
+    try {
+      const user = await User.findOne({ email: data.email });
+    
+      if(!user) {
+        return res.status(403).send('Unauthorizer');
+      }
+      const match = await user.validatePassword(data.password);
+      if(!match) {
+        res.status(401).json({ error: 'Wrong password or email. Try again.' })
+      }
+    
+      const token = jwt.sign({id: user._id}, JWT_SECRET, {
+        expiresIn: 60 * 60 * 24
+      })
+      res.status(200).send({
+        auth: true,
+        token
+      })
+    } catch (error) {
+      return error
+    }
 }
 
 const me = async (req, res) => {
-  console.log('req.userId ::', req.body)
+  console.log('req.userId ::', req.body, req.params)
   const user = await User.findById(req.body.userId, { password: 0 });
 
   if(!user) {
