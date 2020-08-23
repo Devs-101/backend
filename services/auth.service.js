@@ -96,19 +96,16 @@ const login = async (req, res) => {
 }
 
 const me = async (req, res) => {
-  console.log('req.userId ::', req.body.userId);
   try {
     const user = await User.findById(req.body.userId, { password: 0 });
     const organization = await Organization.findOne({userId: req.body.userId});
-    console.log(organization);
-  
     if(!user) {
       return res.status(401).send('Unauthorizer');
     }
   
     res.status(200).send({
       user,
-      organization
+      organization,
     })
     
   } catch (error) {
