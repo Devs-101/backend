@@ -7,7 +7,8 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
   const route = require('../../api/attendees/routes')
-  const request = testServer(route);
+  const { Ateendees } = require('../../__mocks__/attendees.mocks')
+  const request = testServer(route, Ateendees);
 
   describe(`Routes ${baseMock}`, function () {
     it(`[GET] Should return a collection of ${baseMock}`, function(done) {

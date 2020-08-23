@@ -1,4 +1,4 @@
-const attendees = [
+const attendeesInfo = [
   {
     id: '5f3c5f1d0c62e30b5c75a9af',
     email: 'raziel@gmail.com',
@@ -16,5 +16,27 @@ const attendees = [
   }
 ]
 
+class Ateendees {
+  constructor(data) {
+    this.data = data || false
+  }
 
-module.exports = attendees
+  static find () {
+    return attendeesInfo
+  }
+
+  findById(id) {
+    return attendeesInfo.filter(item => item.id == id)[0];
+  }
+
+  save() {
+    attendeesInfo.push(this.data)
+    const item = this.findById(this.data.id)
+    return item
+  }
+}
+
+module.exports = {
+  Ateendees,
+  attendeesInfo
+}

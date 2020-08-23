@@ -1,4 +1,4 @@
-const store = require('../../__mocks__/mocks');
+const store = require('../../models/Attendees');
 const controller = require('./controller');
 
 module.exports = controller(store);
