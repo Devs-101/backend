@@ -5,6 +5,8 @@ const app = express();
 const authRoutes = require('./routes/authRoutes')
 const attendeesRoutes = require('./api/attendees/routes')
 
+const Attendees = require('./models/Attendees')
+
 // Settings
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -12,6 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 // routes
 // app.use('/', authController)
 authRoutes(app);
-attendeesRoutes(app);
+attendeesRoutes(app, Attendees);
 
 module.exports = app;

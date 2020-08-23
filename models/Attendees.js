@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, models, model } = require('mongoose');
 
 const AttendeesSchema = new Schema ({
   email: {
@@ -11,5 +11,10 @@ const AttendeesSchema = new Schema ({
     required: true
   },
 });
+
+AttendeesSchema.path('email').validate(async (email) => {
+  const emailCount = await models.Attendees.countDocuments({ email })
+  return !emailCount
+}, 'Email already exists')
 
 module.exports = model('Attendees', AttendeesSchema);
