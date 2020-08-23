@@ -38,10 +38,10 @@ const registerSave = async (body) => {
 
 const register = async (req, res) => {
   const { body: data } = req;
-  if(data.password !== data.confirm) {
-    res.status(422).json({errors: [{value: data.confirm,
+  if(data.password !== data.confirm_password) {
+    res.status(422).json({errors: [{value: data.confirm_password,
                                   msg: 'Password and confirm must be equals',
-                                  param: 'confirm',
+                                  param: 'confirm_password',
                                   location: 'body'
                                 }]});
   } else {
