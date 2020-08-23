@@ -90,13 +90,14 @@ const eventsSchema = new Schema({
   },
 }, {timestamps: true})
 
-eventsSchema.pre('save', async function(next) {
-  console.log('this.slug ::', this.slug)
-  let count = models.Events.countDocuments({ slug: this.slug })
-  console.log('count ::', count)
 
-  const fullslug = this.slug + ((count === 1) ? '' : '-' + count);
-  console.log('fullslug ::', fullslug)
+eventsSchema.pre('save', async function(next) {
+  const count = await models.Events.countDocuments({ slug: {'$regex': this.slug } })
+
+  let fullslug = this.slug
+  if(count > 0) {
+    fullslug += '-' + (count + 1)
+  }
   this.slug = fullslug
   next();
 });

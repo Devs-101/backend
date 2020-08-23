@@ -11,7 +11,6 @@ const findOrganizations = async (organizationId) => {
 
 const eventDuplicate = async slug => {
   const findEvent = await Events.findOne({ slug });
-  console.log('findEvent', findEvent)
   if (findEvent) {
     return false
   }
@@ -23,10 +22,10 @@ const registerEventSave = async (body) => {
   newEvent.organizationId = body.organizationId
   await newEvent.save(function(err) {
     if (err) {
-      console.log('newEvent::::::::::::::::', err)
+      // console.log('newEvent::::::::::::::::', err)
     }
   });
-  console.log('newEvent', newEvent)
+
   return {
     data: newEvent
   }
@@ -35,17 +34,13 @@ const registerEventSave = async (body) => {
 const registerEvent = async (req, res) => {
   const { body: data } = req;
   const { params: params } = req;
-  console.log('registerEvent :: data ::', data)
-  console.log('registerEvent :: params ::', params.organizationId)
   
   try {
     const findOrganization = await findOrganizations(params.organizationId);
-    console.log('registerEvent :: registerfindOrganizationEvent ::', findOrganization)
     data.organizationId = findOrganization
 
     if (findOrganization) {
       const event = await eventDuplicate(data.slug);
-      console.log('registerEvent :: event ::', event)
       if (event) {
         res.status(200).json({ errors: [{
           value: data.name,
@@ -54,11 +49,10 @@ const registerEvent = async (req, res) => {
           location: 'body'
         }] })
       } else {
-        console.log('registerEvent :: registerEventSave ::', data)
         const newEvent = await registerEventSave(data);
-        console.log('NEW EVENT :: ', newEvent)
         res.status(201).send({
           success: true,
+          example: true,
           data: newEvent.data
         })
       }
