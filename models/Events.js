@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, models } = require('mongoose');
 
 const eventsSchema = new Schema({
   name: {
@@ -89,5 +89,16 @@ const eventsSchema = new Schema({
     required: true
   },
 }, {timestamps: true})
+
+eventsSchema.pre('save', async function(next) {
+  console.log('this.slug ::', this.slug)
+  let count = models.Events.countDocuments({ slug: this.slug })
+  console.log('count ::', count)
+
+  const fullslug = this.slug + ((count === 1) ? '' : '-' + count);
+  console.log('fullslug ::', fullslug)
+  this.slug = fullslug
+  next();
+});
 
 module.exports = model('Events', eventsSchema);

@@ -7,9 +7,9 @@ const router = Router();
 
 
 function eventRoutes(app) {
-  app.use('/', router);
+  app.use('/events', router);
 
-  router.post('/new', verifyToken, validateEvent, registerEvent);
+  router.post('/:organizationId/new', verifyToken, validateEvent, registerEvent);
 }
 
 module.exports = eventRoutes;

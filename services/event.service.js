@@ -1,26 +1,32 @@
 const Organization = require('../models/Organizations');
-const Event = require('../models/Events');
+const Events = require('../models/Events');
 
-const findOrganizations = async (userId) => {
-  const organization = await Organization.findOne({ userId });
-  const organizationId = organization._id
-  if(organizationId) {
-    return true
+const findOrganizations = async (organizationId) => {
+  const organization = await Organization.findOne({ _id: organizationId });
+  if(organization._id) {
+    return organization._id
   }
   return false
 };
 
-const eventDuplicate = async data => {
-  const findEvent = await Event.findOne({_id: data});
+const eventDuplicate = async slug => {
+  const findEvent = await Events.findOne({ slug });
+  console.log('findEvent', findEvent)
   if (findEvent) {
-    return true
+    return false
   }
   return false
 };
 
 const registerEventSave = async (body) => {
-  const newEvent = new Event(body);
-  await newEvent.save();
+  const newEvent = new Events(body);
+  newEvent.organizationId = body.organizationId
+  await newEvent.save(function(err) {
+    if (err) {
+      console.log('newEvent::::::::::::::::', err)
+    }
+  });
+  console.log('newEvent', newEvent)
   return {
     data: newEvent
   }
@@ -28,15 +34,18 @@ const registerEventSave = async (body) => {
 
 const registerEvent = async (req, res) => {
   const { body: data } = req;
-  console.log(data)
+  const { params: params } = req;
+  console.log('registerEvent :: data ::', data)
+  console.log('registerEvent :: params ::', params.organizationId)
   
   try {
-    const findOrganization = await findOrganizations(data.userId);
-    console.log(findOrganization)
+    const findOrganization = await findOrganizations(params.organizationId);
+    console.log('registerEvent :: registerfindOrganizationEvent ::', findOrganization)
+    data.organizationId = findOrganization
 
     if (findOrganization) {
-      const event = await eventDuplicate(data.name);
-      console.log(event)
+      const event = await eventDuplicate(data.slug);
+      console.log('registerEvent :: event ::', event)
       if (event) {
         res.status(200).json({ errors: [{
           value: data.name,
@@ -45,9 +54,9 @@ const registerEvent = async (req, res) => {
           location: 'body'
         }] })
       } else {
-        console.log(req.body);
-        const newEvent = await registerEventSave(req.body);
-        console.log(newEvent)
+        console.log('registerEvent :: registerEventSave ::', data)
+        const newEvent = await registerEventSave(data);
+        console.log('NEW EVENT :: ', newEvent)
         res.status(201).send({
           success: true,
           data: newEvent.data
