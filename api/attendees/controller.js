@@ -1,8 +1,6 @@
 module.exports = function (injectedStore) {
   let store = injectedStore;
-  if (!store) {
-    store = require('../../__mocks__/attendees.mocks').Ateendees;
-  }
+  if (!store) store = require('../../__mocks__/attendees.mocks').Ateendees;
 
   async function getAttendees() {
     const items = await store.find();

@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const organizationsSchema = new Schema({
-  name:{
+  name: {
     type: String,
     required: [true, 'the Organization name is required'],
     trim: true

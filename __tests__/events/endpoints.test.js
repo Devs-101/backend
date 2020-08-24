@@ -10,7 +10,6 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
   const route = require('../../api/events/routes')
-  // const { Events } = require('../../__mocks__/events.mocks')
   const request = testServer(route);
 
   describe(`Routes ${baseMock}`, function () {
@@ -67,7 +66,6 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
       .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNDJhNWVjNDQ5NjE2MWYxMTkyYmNlYiIsImlhdCI6MTU5ODIyMjQ4NywiZXhwIjoxNTk4MzA4ODg3fQ.tOIoDJvlG6Ks0bEgJsq3bi-252ikjAmbUlJgptQUtM4')
       .send(create)
       .end((err, res) => {
-        // console.log('res.body:: ', res.body)
         expect(res.body).toMatchObject({
           error: expect.any(Boolean),
           status: expect.any(Number),
