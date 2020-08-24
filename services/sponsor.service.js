@@ -1,53 +1,47 @@
 const Events = require('../models/Events');
+const Sponsors = require('../models/Sponsors')
 
 
 const findEvents = async eventId => {
-  const event = await Events.findOne({ _id: eventId});
-  //console.log(`findEvents::event:: ${event}`)
+  const event = await Events.findOne({_id: eventId});
   if(event._id) {
     return event._id
   }
   return false
 };
 
-const sponsorDuplicate = async name => {
-  console.log(`sponsorDuplicate:: ${name}`)
-  const findSponsor = await Events.findOne({ sponsors: { name } });
-  console.log(`sponsorDuplicate:: findSponsor:: ${findSponsor}`)
-  if (findSponsor) {
-    return true
+const findSponsor = async name => {
+  console.log(`Este es el name:: ${name}`);
+  const sponsor = await Sponsors.findOne({name});
+  console.log(`Este es el sponsor:: ${sponsor}`);
+  if (sponsor) {
+    return true;
   }
-  return false
-};
+  return false;
+}
 
 const registerSponsorSave = async body => {
-  console.log(body)
-  const event = await Events.findOne({_id: body.eventId});
-  console.log(`registerSponsorSave:: ${event}`)
-  if (!event) return false;
-  const newSponsor = {
+  const data = {
     name: body.name,
     url: body.url,
-    logo: body.logo
+    logo: body.logo,
+    eventId: body.eventId
   }
-  event.sponsors.push(newSponsor);
-  await event.save();
-  return {
-    data: newSponsor
-  }
+  const sponsor = new Sponsors(data)
+  const newSponosr = await sponsor.save();
+  return newSponosr
 };
 
 const registerSponsor = async (req, res) => {
   const { body: data, params: params } = req;
+  console.log('Esta es la eventId: ' + params.eventId)
   
   try {
     const findEvent = await findEvents(params.eventId);
-    //console.log(`findEvent:: ${findEvent}`)
     data.eventId = findEvent
     
     if (findEvent) {
-      const sponsor = await sponsorDuplicate(data.name);
-      console.log(`sponsor:: ${sponsor}`)
+      const sponsor = await findSponsor(data.name);
       if (sponsor) {
         res.status(200).json({ errors: [{
           value: data.name,
@@ -79,15 +73,22 @@ const registerSponsor = async (req, res) => {
   }
 };
 
-const getAllSponsors = async (req, res) => {
-  const event = await Events.findById( req.params.eventId )
-  const sponsors = event.sponsors
-  console.log(`Estos son los sponsors: ${sponsors}`);
-  
-  if (!sponsors) {
-    res.send('No data')
-  } else {
-    res.json({infoSponsors: sponsors})
+const getAllSponsors = async (req, res, next) => {
+  try {
+    const sponsors = await Sponsors.find({eventId: req.params.eventId})
+    
+    if (!sponsors) {
+      res.send('No data')
+    } else {
+      res.json({infoSponsors: sponsors})
+    }
+  } catch (error) {
+    return next(res.send({error: [{
+          value: req.params.eventId,
+          msg: 'Event data error',
+          param: 'eventId',
+          location: 'params'
+    }]}))
   }
 }
 
