@@ -3,6 +3,7 @@ const Events = require('../models/Events');
 
 const findEvents = async eventId => {
   const event = await Events.findOne({ _id: eventId});
+  //console.log(`findEvents::event:: ${event}`)
   if(event._id) {
     return event._id
   }
@@ -10,7 +11,9 @@ const findEvents = async eventId => {
 };
 
 const sponsorDuplicate = async name => {
-  const findSponsor = await Events.sponsors.findOne({ name });
+  console.log(`sponsorDuplicate:: ${name}`)
+  const findSponsor = await Events.findOne({ sponsors: { name } });
+  console.log(`sponsorDuplicate:: findSponsor:: ${findSponsor}`)
   if (findSponsor) {
     return true
   }
@@ -18,7 +21,9 @@ const sponsorDuplicate = async name => {
 };
 
 const registerSponsorSave = async body => {
-  const event = await Events.findOneAndUpdate({_id: body.eventId});
+  console.log(body)
+  const event = await Events.findOne({_id: body.eventId});
+  console.log(`registerSponsorSave:: ${event}`)
   if (!event) return false;
   const newSponsor = {
     name: body.name,
@@ -37,10 +42,12 @@ const registerSponsor = async (req, res) => {
   
   try {
     const findEvent = await findEvents(params.eventId);
+    //console.log(`findEvent:: ${findEvent}`)
     data.eventId = findEvent
     
     if (findEvent) {
-      const sponsor = await sponsorDuplicate(data.eventId);
+      const sponsor = await sponsorDuplicate(data.name);
+      console.log(`sponsor:: ${sponsor}`)
       if (sponsor) {
         res.status(200).json({ errors: [{
           value: data.name,
@@ -51,6 +58,7 @@ const registerSponsor = async (req, res) => {
         })
       } else {
         const newSponsor = await registerSponsorSave(data)
+        console.log(`newSponsor:: ${newSponsor}`)
         res.status(201).send({
           success: true,
           example: true,
@@ -71,6 +79,18 @@ const registerSponsor = async (req, res) => {
   }
 };
 
+const getAllSponsors = async (req, res) => {
+  const event = await Events.findById( req.params.eventId )
+  const sponsors = event.sponsors
+  console.log(`Estos son los sponsors: ${sponsors}`);
+  if (!sponsors) {
+    res.send('No data')
+  } else {
+    res.send(sponsors)
+  }
+}
+
 module.exports = {
-  registerSponsor
+  registerSponsor,
+  getAllSponsors
 }
