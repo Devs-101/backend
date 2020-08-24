@@ -83,10 +83,11 @@ const getAllSponsors = async (req, res) => {
   const event = await Events.findById( req.params.eventId )
   const sponsors = event.sponsors
   console.log(`Estos son los sponsors: ${sponsors}`);
+  
   if (!sponsors) {
     res.send('No data')
   } else {
-    res.send(sponsors)
+    res.json({infoSponsors: sponsors})
   }
 }
 
