@@ -26,7 +26,7 @@ exports.valideLogin = [
 ];
 
 exports.validateEvent = [
-  check('name').not().isEmpty().withMessage('Event_name is required').escape(),
+  check('name').not().isEmpty().withMessage('Event name is required').escape(),
   check('slug').not().isEmpty().withMessage('Slug is required').escape(),
   check('dateHour.initDate').not().isEmpty().isISO8601().withMessage('The event Date is required'),
   (req, res, next) => {

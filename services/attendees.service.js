@@ -1,3 +1,5 @@
+const response = require('../utils/responses');
+
 function attendeesService(storeInjection) {
   const controller = require('../api/attendees/controller') //SE IINICIALIZA CON EL STORE
   let store = storeInjection;
@@ -11,13 +13,7 @@ function attendeesService(storeInjection) {
     const { body: attendee } = req;
     try {
       const newAttendee = await Controller.createAttendee(attendee)
-      return res.status(200).send({
-        success: true,
-        data: newAttendee,
-        route: 'createAttendees'
-      });
-      // const newAttendee = await Controller.createAttendee(attendee)
-      
+      response.success(req, res, newAttendee, 201);
     } catch (error) {
       return res.status(400).send({
         success: true,
@@ -29,12 +25,8 @@ function attendeesService(storeInjection) {
   
   const readAllAttendees = async (req, res) => {
     try {
-      const attendees = await Controller.getAttendees()
-      return res.status(200).send({
-        success: true,
-        data: attendees,
-        route: 'readAllAttendees'
-      });
+      const attendees = await Controller.getAttendees();
+      response.success(req, res, attendees, 201);
     } catch (error) {
       return res.status(400).send({
         success: true,

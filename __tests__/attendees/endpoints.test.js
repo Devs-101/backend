@@ -7,16 +7,15 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
   const route = require('../../api/attendees/routes')
-  const { Ateendees } = require('../../__mocks__/attendees.mocks')
-  const request = testServer(route, Ateendees);
+  const request = testServer(route);
 
   describe(`Routes ${baseMock}`, function () {
     it(`[GET] Should return a collection of ${baseMock}`, function(done) {
       request.get(baseRoute).end((err, res) => {
         expect(res.body).toMatchObject({
-          success: expect.any(Boolean),
-          data: expect.any(Object),
-          route: expect.any(String)
+          error: expect.any(Boolean),
+          status: expect.any(Number),
+          data: expect.any(Object)
         });
         done();
       });
@@ -30,9 +29,9 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
       }
       request.post(baseRoute).send(createAttendee).end((err, res) => {
         expect(res.body).toMatchObject({
-          success: expect.any(Boolean),
-          data: expect.any(Object),
-          route: expect.any(String)
+          error: expect.any(Boolean),
+          status: expect.any(Number),
+          data: expect.any(Object)
         });
         done();
       });
