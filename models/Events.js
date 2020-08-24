@@ -1,4 +1,5 @@
 const { Schema, model, models } = require('mongoose');
+const slug = require('slug')
 
 const eventsSchema = new Schema({
   name: {
@@ -92,6 +93,15 @@ const eventsSchema = new Schema({
 
 
 eventsSchema.pre('save', async function(next) {
+  this.name = (this.name).trim()
+
+  if(!this.slug) {
+    this.slug = slug(this.name)
+  } else {
+    this.slug = (this.slug).trim()
+    this.slug = slug(this.slug)
+  }
+
   const count = await models.Events.countDocuments({ slug: {'$regex': this.slug } })
 
   let fullslug = this.slug
