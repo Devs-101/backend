@@ -10,7 +10,7 @@ module.exports = function (injectedStore) {
   };
 
   async function getOrganizations (userId) {
-    const items = await store.find({ userId });
+    const items = await store.find({ userId, deleted_at: null });
     return items || [];
   }
 
@@ -30,10 +30,19 @@ module.exports = function (injectedStore) {
     return created
   }
 
+  async function erase (_id) {
+    await store.findOneAndUpdate({ _id }, { deleted_at: new Date() });
+    const getDeleted = await this.getOrganization(_id)
+
+    return getDeleted
+
+  }
+
   return {
     findOrganizations,
     getOrganizations,
     getOrganization,
-    register
+    register,
+    erase
   };
 };

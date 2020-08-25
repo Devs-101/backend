@@ -17,9 +17,14 @@ const organizationsSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Events'
   },
+
   slug: {
     type: String,
     unique: true
+
+  deleted_at: {
+    type: Date,
+    default: null
   },
   userId: {
     type: Schema.Types.ObjectId,
