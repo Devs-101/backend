@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const {CLOUD_NAME, API_KEY, API_SECRET} = require('./config/index')
 const path = require('path');
+const slash = require('express-slash');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary');
@@ -18,13 +19,14 @@ const Events = require('./models/Events')
 const Organizations = require('./models/Organizations');
 
 // Settings
+app.use(slash());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 cloudinary.config({
   cloud_name: CLOUD_NAME,
   api_key: API_KEY,
   api_secret: API_SECRET
-})
+});
 
 // Middlewares
 const storage = multer.diskStorage({
