@@ -30,10 +30,18 @@ module.exports = function (injectedStore) {
     return created
   }
 
+  async function update(_id, data) {
+    await store.findOneAndUpdate({ _id }, data);
+    const getUpdated = await this.getOrganization(_id)
+
+    return getUpdated
+  }
+
   return {
     findOrganizations,
     getOrganizations,
     getOrganization,
-    register
+    register,
+    update
   };
 };
