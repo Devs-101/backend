@@ -3,6 +3,7 @@
 
 #nyc
 /.nyc_output
+/public/
 
 # dependencies
 /node_modules
