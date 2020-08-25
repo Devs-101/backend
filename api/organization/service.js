@@ -50,10 +50,29 @@ function organizationService(storeInjection) {
     }
   };
 
+  const erase = async (req, res) => {
+    const { params } = req;
+
+    try {
+      const organizations = await Controller.erase(params.organizationId)
+      if (organizations) {
+        response.success(req, res, organizations, 201);
+      } else {
+        response.error(req, res, [{
+          "msg": "Organization not found",
+          "param": "ORGANIZATION_NOT_FOUND"
+        }], 400)
+      }
+    } catch (error) {
+      response.error(req, res, error.errors, 400)
+    }
+  };
+
   return {
     register,
     readAll,
-    read
+    read,
+    erase
   }
 }
 
