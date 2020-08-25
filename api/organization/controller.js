@@ -30,11 +30,17 @@ module.exports = function (injectedStore) {
     return created
   }
 
+
+  async function update(_id, data) {
+    await store.findOneAndUpdate({ _id }, data);
+    const getUpdated = await this.getOrganization(_id)
+    return getUpdated
+
   async function erase (_id) {
     await store.findOneAndUpdate({ _id }, { deleted_at: new Date() });
     const getDeleted = await this.getOrganization(_id)
-
     return getDeleted
+
 
   }
 
@@ -43,6 +49,7 @@ module.exports = function (injectedStore) {
     getOrganizations,
     getOrganization,
     register,
+    update
     erase
   };
 };

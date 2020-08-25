@@ -33,7 +33,7 @@ function organizationService(storeInjection) {
   };
 
   const read = async (req, res) => {
-    const { params } = req;;
+    const { params } = req;
 
     try {
       const organizations = await Controller.getOrganization(params.organizationId)
@@ -50,6 +50,15 @@ function organizationService(storeInjection) {
     }
   };
 
+
+  const update = async (req, res) => {
+    const { params } = req;
+    const { body: data } = req;
+
+    try {
+      const organizations = await Controller.update(params.organizationId, data)
+      if (organizations) {
+        response.success(req, res, organizations, 200);
   const erase = async (req, res) => {
     const { params } = req;
 
@@ -72,6 +81,7 @@ function organizationService(storeInjection) {
     register,
     readAll,
     read,
+    update
     erase
   }
 }
