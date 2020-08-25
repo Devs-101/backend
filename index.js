@@ -8,5 +8,5 @@ DataBase.connect();
 
 // Server
 const server = app.listen(APP_PORT || '0.0.0.0', () => {
-  console.log(`Listen2 http://localhost:${server.address().port}`);
+  console.log(`Listen:: http://localhost:${server.address().port}`);
 });
