@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, models } = require('mongoose');
+const getUniqueSlug = require('../utils/uniqueSlug');
 
 const organizationsSchema = new Schema({
   name: {
@@ -16,6 +17,11 @@ const organizationsSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Events'
   },
+
+  slug: {
+    type: String,
+    unique: true
+
   deleted_at: {
     type: Date,
     default: null
@@ -25,5 +31,13 @@ const organizationsSchema = new Schema({
     ref: 'Users'
   }
 }, {timestamps: true});
+
+organizationsSchema.pre('save', async function(next) {
+  const { name, slug } = await getUniqueSlug(this.name, this.slug, models.Organizations)
+  this.name = name
+  this.slug = slug
+
+  next();
+});
 
 module.exports = model('Organizations', organizationsSchema);
