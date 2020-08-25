@@ -11,7 +11,7 @@ const SponsorsSchema = new Schema({
     required: [true, 'url is required'],
     trim: true
   },
-  logo: {
+  img: {
     type: String
   },
   eventId: {

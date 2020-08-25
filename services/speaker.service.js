@@ -1,6 +1,6 @@
-const response = require('../utils/responses')
+const response = require('../utils/responses');
 const Events = require('../models/Events');
-const Sponsors = require('../models/Sponsors');
+const Speakers = require('../models/Speakers')
 const cloudinary = require('cloudinary');
 const fs = require('fs-extra');
 
@@ -13,49 +13,50 @@ const findEvents = async eventId => {
   return false
 };
 
-const findSponsor = async name => {
-  const sponsor = await Sponsors.findOne({name});
-  if (sponsor) {
+const findSpeaker = async name => {
+  const speaker = await Speakers.findOne({name});
+  if (speaker) {
     return true;
   }
   return false;
-}
-
-const registerSponsorSave = async (body, file) => {
-  const logoImg = await cloudinary.v2.uploader.upload(file.path)
-  const data = {
-    name: body.name,
-    url: body.url,
-    img: body.img,
-    eventId: body.eventId
-  }
-  const sponsor = new Sponsors(data)
-  sponsor.img = logoImg.secure_url;
-  const newSponsor = await sponsor.save();
-  await fs.unlink(file.path)
-  return newSponsor
 };
 
-const registerSponsor = async (req, res) => {
+const registerSpeakerSave = async (body, file) => {
+  const avatarImg = await cloudinary.v2.uploader.upload(file.path);
+  const data = {
+    name: body.name,
+    img: body.img,
+    twitter: body.twitter,
+    bio: body.bio,
+    rol: body.rol,
+    eventId: body.eventId
+  }
+  const speaker = new Speakers(data);
+  speaker.img = avatarImg.secure_url;
+  const newSpeaker = await speaker.save();
+  await fs.unlink(file.path);
+  return newSpeaker
+};
+
+const registerSpeaker = async (req, res) => {
   const { body: data, params, file } = req;
-  
   try {
     const findEvent = await findEvents(params.eventId);
-    data.eventId = findEvent
-    
+    data.eventId = findEvent;
+
     if (findEvent) {
-      const sponsor = await findSponsor(data.name);
-      if (sponsor) {
+      const speaker = await findSpeaker(data.name);
+      if (speaker) {
         await fs.unlink(file.path)
         response.error(req, res, [{
           value: data.name,
-          msg: 'Sponsor already exist',
+          msg: 'Speaker already exist',
           param: 'name',
           location: 'body'
           }], 200)
       } else {
-        const newSponsor = await registerSponsorSave(data, file)
-        response.success(req, res, newSponsor, 201)
+        const newSpeaker = await registerSpeakerSave(data, file)
+        response.success(req, res, newSpeaker, 201)
       }
     } else {
       response.error(req, res, [{
@@ -70,17 +71,17 @@ const registerSponsor = async (req, res) => {
   }
 };
 
-const getAllSponsors = async (req, res, next) => {
+const getAllSpeakers = async (req, res, next) => {
   try {
-    const sponsors = await Sponsors.find({eventId: req.params.eventId})
-    
-    if (!sponsors) {
+    const speakers = await Speakers.find({ eventId: req.params.eventId})
+
+    if (!speakers) {
       res.send('No data')
     } else {
-      res.json({infoSponsors: sponsors})
+      res.json({ infoSpeakers: speakers})
     }
   } catch (error) {
-    return next(res.send({error: [{
+      next(res.send({error: [{
           value: req.params.eventId,
           msg: 'Event data error',
           param: 'eventId',
@@ -90,6 +91,6 @@ const getAllSponsors = async (req, res, next) => {
 }
 
 module.exports = {
-  registerSponsor,
-  getAllSponsors
+  registerSpeaker,
+  getAllSpeakers
 }

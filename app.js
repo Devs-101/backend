@@ -11,6 +11,7 @@ const eventRoutes = require('./api/events/routes');
 const attendeesRoutes = require('./api/attendees/routes')
 const organizationRoutes = require('./api/organization/routes')
 const sponsorRoutes = require('./routes/sponsorRoutes');
+const speakerRoutes = require('./routes/speakerRoutes');
 
 const Attendees = require('./models/Attendees')
 const Events = require('./models/Events')
@@ -32,12 +33,13 @@ const storage = multer.diskStorage({
       cb(null, uuidv4() + path.extname(file.originalname))
   }
 })
-app.use(multer({ storage }).single('logo'));
+app.use(multer({ storage }).single('img'));
 
 // routes
 authRoutes(app);
 eventRoutes(app, Events);
 sponsorRoutes(app);
+speakerRoutes(app);
 attendeesRoutes(app, Attendees);
 organizationRoutes(app, Organizations)
 
