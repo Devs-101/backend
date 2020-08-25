@@ -50,6 +50,7 @@ function organizationService(storeInjection) {
     }
   };
 
+
   const update = async (req, res) => {
     const { params } = req;
     const { body: data } = req;
@@ -58,6 +59,13 @@ function organizationService(storeInjection) {
       const organizations = await Controller.update(params.organizationId, data)
       if (organizations) {
         response.success(req, res, organizations, 200);
+  const erase = async (req, res) => {
+    const { params } = req;
+
+    try {
+      const organizations = await Controller.erase(params.organizationId)
+      if (organizations) {
+        response.success(req, res, organizations, 201);
       } else {
         response.error(req, res, [{
           "msg": "Organization not found",
@@ -74,6 +82,7 @@ function organizationService(storeInjection) {
     readAll,
     read,
     update
+    erase
   }
 }
 
