@@ -1,3 +1,4 @@
+const response = require('../utils/responses')
 const Events = require('../models/Events');
 const Sponsors = require('../models/Sponsors');
 const cloudinary = require('cloudinary');
@@ -22,9 +23,8 @@ const findSponsor = async name => {
   return false;
 }
 
-const registerSponsorSave = async body => {
-  //console.log(body)
-  //const logoImg = await cloudinary.v2.uploader.upload(body.file.path)
+const registerSponsorSave = async (body, file) => {
+  const logoImg = await cloudinary.v2.uploader.upload(file.path)
   const data = {
     name: body.name,
     url: body.url,
@@ -32,16 +32,14 @@ const registerSponsorSave = async body => {
     eventId: body.eventId
   }
   const sponsor = new Sponsors(data)
-  //sponsor.logo = logoImg.secure_url;
+  sponsor.logo = logoImg.secure_url;
   const newSponosr = await sponsor.save();
-  //await fs.unlink(body.file.path)
+  await fs.unlink(file.path)
   return newSponosr
 };
 
 const registerSponsor = async (req, res) => {
-  const { body: data, params: params } = req;
-  console.log(req.file)
-  console.log('Esta es la eventId: ' + params.eventId)
+  const { body: data, params, file } = req;
   
   try {
     const findEvent = await findEvents(params.eventId);
@@ -50,30 +48,24 @@ const registerSponsor = async (req, res) => {
     if (findEvent) {
       const sponsor = await findSponsor(data.name);
       if (sponsor) {
-        res.status(200).json({ errors: [{
+        await fs.unlink(file.path)
+        response.error(req, res, [{
           value: data.name,
           msg: 'Sponsor already exist',
           param: 'name',
           location: 'body'
-          }]
-        })
+          }], 200)
       } else {
-        const newSponsor = await registerSponsorSave(data)
-        console.log(`newSponsor:: ${newSponsor}`)
-        res.status(201).send({
-          success: true,
-          example: true,
-          data: newSponsor.data
-        })
+        const newSponsor = await registerSponsorSave(data, file)
+        response.success(req, res, newSponsor, 201)
       }
     } else {
-      res.status(200).json({ errors: [{
+      response.error(req, res, [{
         value: data.name,
         msg: 'Event doesnt exist',
         param: 'name',
         location: 'body'
-        }]
-      })
+        }], 200)
     }
   } catch (error) {
     error
