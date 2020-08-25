@@ -33,9 +33,9 @@ const registerSponsorSave = async (body, file) => {
   }
   const sponsor = new Sponsors(data)
   sponsor.logo = logoImg.secure_url;
-  const newSponosr = await sponsor.save();
+  const newSponsor = await sponsor.save();
   await fs.unlink(file.path)
-  return newSponosr
+  return newSponsor
 };
 
 const registerSponsor = async (req, res) => {
