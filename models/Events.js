@@ -50,11 +50,6 @@ const eventsSchema = new Schema({
     text: String,
     image: String
   }],
-  sponsors: [{
-    name: String,
-    logo: String,
-    url: String
-  }],
   countDown: {
     type: Boolean,
     default: true
