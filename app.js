@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
       cb(null, uuidv4() + path.extname(file.originalname))
   }
 })
-app.use(multer({ storage }).single('image'));
+app.use(multer({ storage }).single('logo'));
 
 // routes
 authRoutes(app);

@@ -1,5 +1,7 @@
 const Events = require('../models/Events');
-const Sponsors = require('../models/Sponsors')
+const Sponsors = require('../models/Sponsors');
+const cloudinary = require('cloudinary');
+const fs = require('fs-extra');
 
 
 const findEvents = async eventId => {
@@ -21,6 +23,8 @@ const findSponsor = async name => {
 }
 
 const registerSponsorSave = async body => {
+  //console.log(body)
+  //const logoImg = await cloudinary.v2.uploader.upload(body.file.path)
   const data = {
     name: body.name,
     url: body.url,
@@ -28,12 +32,15 @@ const registerSponsorSave = async body => {
     eventId: body.eventId
   }
   const sponsor = new Sponsors(data)
+  //sponsor.logo = logoImg.secure_url;
   const newSponosr = await sponsor.save();
+  //await fs.unlink(body.file.path)
   return newSponosr
 };
 
 const registerSponsor = async (req, res) => {
   const { body: data, params: params } = req;
+  console.log(req.file)
   console.log('Esta es la eventId: ' + params.eventId)
   
   try {
