@@ -53,9 +53,45 @@ function eventsService(storeInjection) {
     }
   };
 
+  const publish = async (req, res) => {
+    const { params: params } = req;
+
+    try {
+      const event = await Controller.getEvent(params.eventId);
+      let checkComplete = []
+      if (event) {
+        if(!event.name) checkComplete.push('NO_EVENT_NAME')
+        if(!event.dateHour.initDate) checkComplete.push('NO_EVENT_START_DATE')
+        if(!event.img) checkComplete.push('NO_EVENT_LOGO')
+
+        if(!event.broadcast.subject) checkComplete.push('NO_EVENT_BROADCAST_SUBJECT')
+        if(!event.broadcast.text) checkComplete.push('NO_EVENT_BROADCAST_TEXT')
+        if(!event.broadcast.img) checkComplete.push('NO_EVENT_BROADCAST_IMG')
+
+        if(event.bannerOrHeader.isBanner) {
+          if(!event.bannerOrHeader.img) checkComplete.push('NO_EVENT_BANNER_IMAGE')
+        } else {
+          if(!event.bannerOrHeader.text) checkComplete.push('NO_EVENT_HEADER_IMAGE')
+        }
+
+        if(checkComplete.length > 0) {
+          response.error(req, res, checkComplete, 400)
+        } else {
+          const published = await Controller.publishEvent(event._id)
+          response.success(req, res, published, 201);
+        }
+      } else {
+        response.error(req, res, [ 'EVENT_NOT_FOUND' ], 400)
+      }
+    } catch (error) {
+      response.error(req, res, [ 'EVENT_NOT_FOUND' ], 400)
+    }
+  };
+
   return {
     registerEvent,
-    readAllEvents
+    readAllEvents,
+    publish
   }
 }
 
