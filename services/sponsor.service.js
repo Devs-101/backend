@@ -70,7 +70,7 @@ const registerSponsor = async (req, res) => {
   }
 };
 
-const getAllSponsors = async (req, res, next) => {
+const getAllSponsors = async (req, res) => {
   try {
     const sponsors = await Sponsors.find({eventId: req.params.eventId})
     
@@ -80,16 +80,35 @@ const getAllSponsors = async (req, res, next) => {
       res.json({infoSponsors: sponsors})
     }
   } catch (error) {
-    return next(res.send({error: [{
+    return res.send({error: [{
           value: req.params.eventId,
           msg: 'Event data error',
           param: 'eventId',
           location: 'params'
-    }]}))
+    }]})
+  }
+}
+
+const deleteSponsor = async (req, res) => {
+  const  id  = req.body.sponsorId
+  console.log(id)
+  
+  try {
+    const sponsor = await Sponsors.findById(id);
+  
+    if(sponsor) {
+      sponsor.remove();
+      res.status(200).send({success: 'ok', msg: 'sponsor deleted'})
+    } else {
+      res.status(403).send('Sponsor doesnt exist')
+    }
+  } catch (error) {
+    error
   }
 }
 
 module.exports = {
   registerSponsor,
-  getAllSponsors
+  getAllSponsors,
+  deleteSponsor
 }
