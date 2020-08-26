@@ -10,6 +10,7 @@ function eventRoutes(app, store) {
 
   router.post('/:organizationId/new', verifyToken, validateEvent, EventsService.registerEvent);
   router.get('/:organizationId/get', verifyToken, EventsService.readAllEvents);
+  router.get('/:eventId/publish', verifyToken, EventsService.publish);
 }
 
 module.exports = eventRoutes;
