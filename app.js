@@ -13,13 +13,14 @@ const attendeesRoutes = require('./api/attendees/routes')
 const organizationRoutes = require('./api/organization/routes')
 const sponsorRoutes = require('./routes/sponsorRoutes');
 const speakerRoutes = require('./routes/speakerRoutes');
+const talkRoutes = require('./routes/talksRoutes');
+
 
 const Attendees = require('./models/Attendees')
 const Events = require('./models/Events')
 const Organizations = require('./models/Organizations');
 
 // Settings
-app.use(slash());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 cloudinary.config({
@@ -31,6 +32,7 @@ cloudinary.config({
 // Middlewares
 const storage = multer.diskStorage({
   destination: path.join(__dirname, 'public/img/upload'),
+  // eslint-disable-next-line no-unused-vars
   filename: (req, file, cb, filename) => {
       cb(null, uuidv4() + path.extname(file.originalname))
   }
@@ -42,7 +44,10 @@ authRoutes(app);
 eventRoutes(app, Events);
 sponsorRoutes(app);
 speakerRoutes(app);
+talkRoutes(app);
 attendeesRoutes(app, Attendees);
 organizationRoutes(app, Organizations)
+
+app.use(slash());
 
 module.exports = app;

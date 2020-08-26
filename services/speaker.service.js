@@ -1,6 +1,6 @@
 const response = require('../utils/responses');
 const Events = require('../models/Events');
-const Speakers = require('../models/Speakers')
+const Speakers = require('../models/Speakers');
 const cloudinary = require('cloudinary');
 const fs = require('fs-extra');
 
@@ -90,7 +90,25 @@ const getAllSpeakers = async (req, res, next) => {
   }
 }
 
+const deleteSpeaker = async (req, res) => {
+  const  id  = req.body.speakerId
+  
+  try {
+    const speaker = await Speakers.findById(id);
+  
+    if(speaker) {
+      speaker.remove();
+      res.status(200).send({success: 'ok', msg: 'speaker deleted'})
+    } else {
+      res.status(403).send('Error')
+    }
+  } catch (error) {
+    error
+  }
+}
+
 module.exports = {
   registerSpeaker,
-  getAllSpeakers
+  getAllSpeakers,
+  deleteSpeaker
 }
