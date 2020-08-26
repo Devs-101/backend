@@ -2,7 +2,6 @@ const User = require('../models/User');
 const Organization = require('../models/Organizations');
 const jwt = require('jsonwebtoken');
 
-
 const { JWT_SECRET } = require('../config');
 
 const registerDuplicationDatabase = async (email) => {
@@ -21,10 +20,9 @@ const registerSave = async (body) => {
   await newUser.save();
 
   const newOrganization = new Organization(body);
-  const user = await User.findById(newUser._id);
-  if(!user) return
+  if(!newUser) return
   newOrganization.name = body.organization_name;
-  newOrganization.userId = user._id
+  newOrganization.userId = newUser._id
   await newOrganization.save()
 
   const token = jwt.sign({id: newUser._id}, JWT_SECRET, {
@@ -49,11 +47,9 @@ const register = async (req, res) => {
       const findEmail = await registerDuplicationDatabase(data.email)
     
       if(findEmail) {
-        res.status(200).json({ errors: [{
+        res.status(409).json({ errors: [{
           value: data.email,
-          msg: 'Email already exist',
-          param: 'email',
-          location: 'body'
+          msg: 'Some fields are incorrect.'
         }] })
       } else {
         const newUser = await registerSave(req.body)
@@ -71,6 +67,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { body: data } = req;
+  console.log('login::', data)
 
     try {
       const user = await User.findOne({ email: data.email });
@@ -78,6 +75,8 @@ const login = async (req, res) => {
       if(!user) {
         return res.status(403).send('Unauthorizer');
       }
+
+      console.log('User::', user)
       const match = await user.validatePassword(data.password);
       if(!match) {
         res.status(401).json({ error: 'Wrong password or email. Try again.' })

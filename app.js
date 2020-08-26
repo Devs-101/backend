@@ -20,8 +20,8 @@ const Events = require('./models/Events')
 const Organizations = require('./models/Organizations');
 
 // Settings
+app.use(cors());
 app.use(express.json());
-app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 cloudinary.config({
   cloud_name: CLOUD_NAME,
