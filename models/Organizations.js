@@ -7,7 +7,7 @@ const organizationsSchema = new Schema({
     required: [true, 'the Organization name is required'],
     trim: true
   },
-  logo: {
+  img: {
     type: String
   },
   description: {

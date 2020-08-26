@@ -17,6 +17,7 @@
     "cloudinary": "^1.22.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-slash": "^2.0.1",
     "express-validator": "^6.6.1",
     "fs-extra": "^9.0.1",
     "jsonwebtoken": "^8.5.1",

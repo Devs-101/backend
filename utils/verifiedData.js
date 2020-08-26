@@ -58,3 +58,16 @@ exports.validateSponsor = [
     next();
   }
 ]
+
+exports.validateSpeaker = [
+  check('name').not().isEmpty().withMessage('Sponsor name is required').escape(),
+  check('twitter').not().isEmpty().withMessage('twitter is required').escape(),
+  check('bio').not().isEmpty().withMessage('bio is required').escape(),
+  check('rol').not().isEmpty().withMessage('rol is required').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(403).json({ errors: errors.array()})
+    next();
+  }
+]
