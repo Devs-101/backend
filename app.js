@@ -9,6 +9,7 @@ const cloudinary = require('cloudinary');
 const cors = require('cors')
 
 const authRoutes = require('./routes/authRoutes');
+const broadcastRoutes = require('./api/broadcast/routes')
 const eventRoutes = require('./api/events/routes');
 const attendeesRoutes = require('./api/attendees/routes')
 const organizationRoutes = require('./api/organization/routes')
@@ -43,6 +44,7 @@ app.use(multer({ storage }).single('img'));
 
 // routes
 authRoutes(app);
+broadcastRoutes(app, Events);
 eventRoutes(app, Events);
 sponsorRoutes(app);
 speakerRoutes(app);
