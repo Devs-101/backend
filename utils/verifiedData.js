@@ -49,7 +49,7 @@ exports.validateOrganization = [
 
 exports.validateSponsor = [
   check('name').not().isEmpty().withMessage('Sponsor name is required').escape(),
-  // check('logo').not().isEmpty().withMessage('Logo is required').escape(),
+  check('img').isEmpty().withMessage('img is required').escape(),
   check('url').not().isEmpty().withMessage('Url is required').escape(),
   (req, res, next) => {
     const errors = validationResult(req);

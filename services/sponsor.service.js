@@ -89,6 +89,29 @@ const getAllSponsors = async (req, res) => {
   }
 }
 
+const updateSponsor = async (req, res) => {
+  const {body: data, file} = req;
+  const logoImg = await cloudinary.v2.uploader.upload(file.path)
+
+    try {
+      const findSponsor = await Sponsors.findById(data.sponsorId);
+      const sponsorUpdate = {
+        name: data.name,
+        url: data.url,
+        img: data.img,
+      }
+      sponsorUpdate.img = logoImg.secure_url
+      if(!findSponsor) res.status(404).send('Sponsor doesnt exits')
+      const sponsor = await Sponsors.findOneAndUpdate({_id: req.body.sponsorId}, sponsorUpdate, {
+        new: true,
+        runValidators: true
+      });
+      res.status(200).json({success: 'Ok', info: sponsor})
+    } catch (error) {
+      res.send('error')
+    }
+}
+
 const deleteSponsor = async (req, res) => {
   const  id  = req.body.sponsorId
   console.log(id)
@@ -110,5 +133,6 @@ const deleteSponsor = async (req, res) => {
 module.exports = {
   registerSponsor,
   getAllSponsors,
+  updateSponsor,
   deleteSponsor
 }
