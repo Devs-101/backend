@@ -1,5 +1,5 @@
 const { Schema, model, models } = require('mongoose');
-const slug = require('slug')
+const getUniqueSlug = require('../utils/uniqueSlug');
 
 const eventsSchema = new Schema({
   name: {
@@ -88,22 +88,9 @@ const eventsSchema = new Schema({
 
 
 eventsSchema.pre('save', async function(next) {
-  this.name = (this.name).trim()
-
-  if(!this.slug) {
-    this.slug = slug(this.name)
-  } else {
-    this.slug = (this.slug).trim()
-    this.slug = slug(this.slug)
-  }
-
-  const count = await models.Events.countDocuments({ slug: {'$regex': this.slug } })
-
-  let fullslug = this.slug
-  if(count > 0) {
-    fullslug += '-' + (count + 1)
-  }
-  this.slug = fullslug
+  const { name, slug } = await getUniqueSlug(this.name, this.slug, models.Events)
+  this.name = name
+  this.slug = slug
   next();
 });
 
