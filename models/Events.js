@@ -30,15 +30,22 @@ const eventsSchema = new Schema({
     type: String,
     // At the moment we accept just 2 omnitrix or cureness!
   },
-  broadcast: [{
+  broadcast: {
     subject: {
       type: String,
       require: [true, 'the subject is required'],
-      trim: true
+      trim: true,
+      default: 'Remember my event'
     },
-    text: String,
-    image: String
-  }],
+    text: {
+      type: String,
+      default: 'Thanks to register to my event.'
+    },
+    image: {
+      type: String,
+      default: 'image.png'
+    },
+  },
   countDown: {
     type: Boolean,
     default: true
