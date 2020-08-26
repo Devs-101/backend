@@ -90,6 +90,29 @@ const getAllSpeakers = async (req, res, next) => {
   }
 }
 
+const updateSpeaker = async (req, res) => {
+  const {body: data, file} = req;
+  const logoImg = await cloudinary.v2.uploader.upload(file.path)
+
+    try {
+      const findSpeaker = await Speakers.findById(data.speakerId);
+      const speakerUpdate = {
+        name: data.name,
+        url: data.url,
+        img: data.img,
+      }
+      speakerUpdate.img = logoImg.secure_url
+      if(!findSpeaker) res.status(404).send('Speaker doesnt exits')
+      const speaker = await Speakers.findOneAndUpdate({_id: data.sponsorId}, speakerUpdate, {
+        new: true,
+        runValidators: true
+      });
+      res.status(200).json({success: 'Ok', info: speaker})
+    } catch (error) {
+      res.send('error')
+    }
+}
+
 const deleteSpeaker = async (req, res) => {
   const  id  = req.body.speakerId
   
@@ -110,5 +133,6 @@ const deleteSpeaker = async (req, res) => {
 module.exports = {
   registerSpeaker,
   getAllSpeakers,
+  updateSpeaker,
   deleteSpeaker
 }
