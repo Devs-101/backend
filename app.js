@@ -6,6 +6,7 @@ const slash = require('express-slash');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary');
+const cors = require('cors')
 
 const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./api/events/routes');
@@ -21,6 +22,7 @@ const Events = require('./models/Events')
 const Organizations = require('./models/Organizations');
 
 // Settings
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 cloudinary.config({

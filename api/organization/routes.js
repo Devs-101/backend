@@ -13,6 +13,8 @@ function organizationRoutes(app, store) {
   router.post('/', verifyToken, validateOrganization, OrganizationsService.register);
   router.get('/', verifyToken, OrganizationsService.readAll);
   router.get('/:organizationId', verifyToken, OrganizationsService.read);
+  router.put('/:organizationId', verifyToken, validateOrganization, OrganizationsService.update);
+  router.delete('/:organizationId', verifyToken, OrganizationsService.erase);
 
 }
 

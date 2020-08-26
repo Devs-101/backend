@@ -30,6 +30,12 @@ usersSchema.pre('save', async function(next) {
   next();
 });
 
+usersSchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.password;
+  return obj;
+ }
+
 usersSchema.methods.validatePassword = function (password) {
   return bcrypt.compare(password, this.password);
 }
