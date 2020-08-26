@@ -17,17 +17,6 @@ const eventsSchema = new Schema({
     description: String,
     date: Date,
     hour: Date,
-    speakers: [{
-      name: {
-        type:String,
-        require: true,
-        trim: true
-      },
-      avatar: String,
-      twitter: String,
-      biografia: String,
-      rol: String
-    }]
   }],
   eventStatus: {
     type: Boolean,
