@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary');
 const cors = require('cors')
 
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./api/auth/routes');
 const broadcastRoutes = require('./api/broadcast/routes')
 const eventRoutes = require('./api/events/routes');
 const attendeesRoutes = require('./api/attendees/routes')
@@ -18,9 +18,10 @@ const speakerRoutes = require('./routes/speakerRoutes');
 const talkRoutes = require('./routes/talksRoutes');
 
 
-const Attendees = require('./models/Attendees')
-const Events = require('./models/Events')
+const Attendees = require('./models/Attendees');
+const Events = require('./models/Events');
 const Organizations = require('./models/Organizations');
+const Users = require('./models/User')
 
 // Settings
 app.use(cors());
@@ -43,7 +44,7 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single('img'));
 
 // routes
-authRoutes(app);
+authRoutes(app, Users);
 broadcastRoutes(app, Events);
 eventRoutes(app, Events);
 sponsorRoutes(app);

@@ -21,11 +21,7 @@ module.exports = function (injectedStore) {
 
   async function register (data) {
     const created = new store(data);
-    await created.save(function(err) {
-      if (err) {
-        return err
-      }
-    });
+    await created.save();
   
     return created
   }
