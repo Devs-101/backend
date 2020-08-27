@@ -27,8 +27,20 @@ exports.valideLogin = [
 
 exports.validateEvent = [
   check('name').not().isEmpty().withMessage('Event name is required').escape(),
-  //check('slug').not().isEmpty().withMessage('Slug is required').escape(),
-  check('dateHour.initDate').not().isEmpty().isISO8601().withMessage('The event Date is required'),
+  check('dateHour.initDate').not().isEmpty().isISO8601().withMessage('The event Start Date is required'),
+  check('dateHour.initDate').custom((value, { req }) => {
+    if(new Date() > new Date(req.body.dateHour.initDate)) {
+        throw new Error ('Start Date must be more than today');
+    }
+    return true;
+  }),
+  check('dateHour.endDate').not().isEmpty().isISO8601().withMessage('The event End Date is required'),
+  check('dateHour.endDate').custom((value, { req }) => {
+    if(new Date(value) <= new Date(req.body.dateHour.initDate)) {
+        throw new Error ('End Date must be more than Start Date');
+    }
+    return true;
+  }),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
