@@ -1,7 +1,7 @@
 const response = require('../../utils/responses');
 const cloudinary = require('cloudinary');
 const fs = require('fs-extra');
-// const { defaultImages } = require('../../utils/defaultImages');
+const { defaultImages } = require('../../utils/defaultImages');
 
 function sponsorService(storeInjection) {
   const controller = require('./controller');
@@ -31,7 +31,7 @@ function sponsorService(storeInjection) {
 
       data.eventId = findEvent._id;
 
-      data.img = 'defaultImages.sponsor';
+      data.img = defaultImages.sponsor;
       if (file) {
         const avatarImg = await cloudinary.v2.uploader.upload(file.path);
         data.img = avatarImg.secure_url;
