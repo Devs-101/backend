@@ -14,14 +14,15 @@ const eventRoutes = require('./api/events/routes');
 const attendeesRoutes = require('./api/attendees/routes')
 const organizationRoutes = require('./api/organization/routes')
 const sponsorRoutes = require('./routes/sponsorRoutes');
-const speakerRoutes = require('./routes/speakerRoutes');
+const speakerRoutes = require('./api/speakers/routes');
 const talkRoutes = require('./routes/talksRoutes');
 
 
 const Attendees = require('./models/Attendees');
 const Events = require('./models/Events');
 const Organizations = require('./models/Organizations');
-const Users = require('./models/User')
+const Users = require('./models/User');
+const Speakers = require('./models/Speakers');
 
 // Settings
 app.use(cors());
@@ -48,7 +49,7 @@ authRoutes(app, Users);
 broadcastRoutes(app, Events);
 eventRoutes(app, Events);
 sponsorRoutes(app);
-speakerRoutes(app);
+speakerRoutes(app, Speakers);
 talkRoutes(app);
 attendeesRoutes(app, Attendees);
 organizationRoutes(app, Organizations)

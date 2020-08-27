@@ -12,7 +12,7 @@ module.exports = function (injectedStore) {
 
   async function getEvents() {
     const items = await store.find();
-    return items || [];
+    return items || false;
   }
 
   async function getEvent(_id) {
@@ -22,7 +22,7 @@ module.exports = function (injectedStore) {
 
   async function publishEvent(_id) {
     const items = await store.findOneAndUpdate({ _id }, { eventStatus: true }, { new: true });
-    return items || [];
+    return items || false;
   }
 
   return {
