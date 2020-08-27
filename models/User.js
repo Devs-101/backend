@@ -36,8 +36,4 @@ usersSchema.methods.toJSON = function() {
   return obj;
  }
 
-usersSchema.methods.validatePassword = function (password) {
-  return bcrypt.compare(password, this.password);
-}
-
 module.exports = model('Users', usersSchema);

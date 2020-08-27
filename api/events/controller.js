@@ -16,14 +16,11 @@ module.exports = function (injectedStore) {
   }
 
   async function getEvent(_id) {
-    console.log('Itme:: ', _id)
     const items = await store.findOne({ _id });
-    console.log('Itme:: ', items)
     return items || false;
   }
 
   async function publishEvent(_id) {
-    console.log('publishEvent::', _id)
     const items = await store.findOneAndUpdate({ _id }, { eventStatus: true }, { new: true });
     return items || [];
   }
