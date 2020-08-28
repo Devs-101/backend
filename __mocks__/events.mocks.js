@@ -1,6 +1,6 @@
 const eventsInfo = [
   {
-    _id: '5f42c4b914b927068cd8523d',
+    _id: '5f3c5f7944a4d553acb61740',
     eventStatus: false,
     countDown: true,
     allowRegister: true,
@@ -22,7 +22,7 @@ const eventsInfo = [
     updatedAt: '2020-08-23T19:34:17.885Z'
   },
   {
-    _id: '5f42c4b914b927068cd8523d',
+    _id: '5f42c4ba14b927068cd8523f',
     eventStatus: false,
     countDown: true,
     allowRegister: true,
@@ -44,7 +44,7 @@ const eventsInfo = [
     updatedAt: '2020-08-23T19:34:17.885Z'
   },
   {
-    _id: '5f42c4b914b927068cd8523d',
+    _id: '5f42c4ba14b927068cd8523f',
     eventStatus: false,
     countDown: true,
     allowRegister: true,
@@ -74,6 +74,11 @@ class Events {
 
   static find () {
     return eventsInfo
+  }
+
+  static findOne(_id) {
+    _id._id ? _id =  _id._id : null
+    return eventsInfo.filter(item => item._id === _id)[0];
   }
 
   findById(id) {

@@ -1,27 +1,24 @@
 const sponsorsInfo = [
   {
-    "broadcast": {
-        "subject": "Remember my event",
-        "text": "Thanks to register to my event.",
-        "image": "image.png"
-    },
-    "_id": "5f46f05a19f76b6040b785ea"
+    _id: '5f448d646fd1395360789a9a',
+    name: 'Platzi',
+    url: 'www.platzi.com',
+    logo: 'https://res.cloudinary.com/dnp43rl6a/image/upload/v1598328165/zcaxj2eo2havpj0tbwbk.png',
+    eventId: '5f42c4b914b927068cd8523d'
   },
   {
-    "broadcast": {
-        "subject": "Remember my event",
-        "text": "Thanks to register to my event.",
-        "image": "image.png"
-    },
-    "_id": "5f42bf9b495793583c2a923d"
+    _id: '5f448e10e3fc356f643254c9',
+    name: 'Facebook',
+    url: 'www.facebook.com',
+    logo: 'https://res.cloudinary.com/dnp43rl6a/image/upload/v1598328165/zcaxj2eo2havpj0tbwbk.png',
+    eventId: '5f42c4b914b927068cd8523d'
   },
   {
-    "broadcast": {
-        "subject": "Remember my event",
-        "text": "Thanks to register to my event.",
-        "image": "image.png"
-    },
-    "_id": "5f42c1870d55711698a694cc"
+    _id: '5f476effcb9f083124cece61',
+    name: 'Blizard',
+    url: 'www.blizzard.com',
+    logo: 'https://res.cloudinary.com/dnp43rl6a/image/upload/v1598328165/zcaxj2eo2havpj0tbwbk.png',
+    eventId: '5f447c4ca2c42d5fa8300eac'
   }
 ]
 
@@ -32,6 +29,20 @@ class Sponsors {
 
   static find () {
     return sponsorsInfo
+  }
+
+  static findOne({ _id }) {
+    return sponsorsInfo.filter(item => item._id == _id)[0];
+  }
+
+  static findOneAndUpdate({ _id }, data) {
+    return data
+  }
+
+  static deleteOne({ _id }) {
+    return {
+      deletedCount: 1
+    }
   }
 
   findById(id) {

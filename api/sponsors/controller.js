@@ -1,7 +1,7 @@
 module.exports = function (injectedStore) {
   let store = injectedStore;
 
-  if (!store) store = require('../../__mocks__/speakers.mocks').Speakers;
+  if (!store) store = require('../../__mocks__/sponsors.mocks').Sponsors;
 
   async function registerSponsor(body) {
     const item = new store(body);
@@ -31,8 +31,6 @@ module.exports = function (injectedStore) {
 
   async function deleteSponsor(_id) {
     const item = await store.deleteOne({ _id });
-
-    console.log('item', item.deletedCount);
 
     return item.deletedCount || false;
   }

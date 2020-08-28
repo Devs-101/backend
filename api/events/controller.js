@@ -16,6 +16,7 @@ module.exports = function (injectedStore) {
   }
 
   async function getEvent(_id) {
+    console.log('getEvent')
     const items = await store.findOne({ _id });
     return items || false;
   }
