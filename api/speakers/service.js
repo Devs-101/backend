@@ -26,8 +26,8 @@ function speakerService(storeInjection) {
       if(!findEvent) response.error(req, res, [{
         value: data.name,
         msg: 'Event doesnt exist',
-        param: 'name'
-        }], 400)
+        param: 'eventId'
+        }], 400);
 
       data.eventId = findEvent._id;
 

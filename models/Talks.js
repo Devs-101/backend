@@ -11,8 +11,12 @@ const TalksSchema = new Schema({
     required: true,
     trim: true
   },
-  dateHour: {
+  initDate: {
     type: Date,
+    required: true,
+  },
+  durationInMinutes: {
+    type: Number,
     required: true,
   },
   eventId: {

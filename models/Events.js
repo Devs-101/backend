@@ -12,12 +12,6 @@ const eventsSchema = new Schema({
     required: [true, 'The description is required'],
     trim: true
   },
-  talks: [{
-    name: String,
-    description: String,
-    date: Date,
-    hour: Date,
-  }],
   eventStatus: {
     type: Boolean,
     default: false
