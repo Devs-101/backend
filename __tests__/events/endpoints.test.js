@@ -6,7 +6,7 @@ const baseMock ='Events'
 
 let token
 
-describe(`[${baseMock}] ENDPOINTS`, function () {
+xdescribe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
   const route = require('../../api/events/routes')

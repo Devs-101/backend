@@ -4,9 +4,8 @@ const organizationsInfo = [
     name: 'Vue Conf',
     description: 'The Official Vue.js Conference in the US',
     logo: 'https://us.vuejs.org/_nuxt/img/3a1c375.png',
-    userId: '5f42a2b78814a10955374ae3',
-    createdAt: '2020-08-23T17:09:12.014Z',
-    updatedAt: '2020-08-23T17:09:12.014Z'
+    userId: '5f489a94ec79ea2808e79e38',
+    deleted_at: null
   },
   {
     _id: '5f42a5838814a10955374ae6',
@@ -14,8 +13,7 @@ const organizationsInfo = [
     description: 'The first and most incredible Angular conference in Latin America',
     logo: 'https://ngconf.co/assets/logo-01.png',
     userId: '5f42a2b78814a10955374ae3',
-    createdAt: '2020-08-23T17:09:12.014Z',
-    updatedAt: '2020-08-23T17:09:12.014Z'
+    deleted_at: null
   },
   {
     _id: '5f42a5ec4496161f1192bcec',
@@ -23,8 +21,7 @@ const organizationsInfo = [
     description: 'The Biggest React Conference Worldwide',
     logo: 'https://reactsummit.com/img/logo.svg',
     userId: '5f42a2b78814a10955374ae3',
-    createdAt: '2020-08-23T17:09:12.014Z',
-    updatedAt: '2020-08-23T17:09:12.014Z'
+    deleted_at: null
   }
 ]
 
@@ -33,8 +30,8 @@ class Organizations {
     this.data = data || false
   }
 
-  static find () {
-    return organizationsInfo
+  static find ({ userId }) {
+    return organizationsInfo.filter(item => item.userId === userId)[0];
   }
 
   static findOne ({ _id }) {

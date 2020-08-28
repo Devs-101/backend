@@ -8,7 +8,6 @@ const attendeesService = require('./service')
 
 function attendeesRoutes(app, store) {
   const AttendeesService = attendeesService(store)
-
   app.use('/attendees', router);
 
   router.post('/:eventId/', valideAttendees, AttendeesService.registerAttendees);

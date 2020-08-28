@@ -6,7 +6,7 @@ const Controller = controller(Organizations)
 
 const baseMock ='Organizations'
 
-describe(`[${baseMock}] FUNCTIONS`, function () {
+xdescribe(`[${baseMock}] FUNCTIONS`, function () {
   describe(`Controller ${baseMock}`, function () {
     test(`[GET ALL] should return collection of objects`, () => {
       return Controller.getOrganizations('5f42a2b78814a10955374ae3').then((organizations) => {

@@ -3,7 +3,7 @@ const testServer = require('../../utils/testServer')
 const baseRoute ='/organizations'
 const baseMock ='Organization'
 
-describe(`[${baseMock}] ENDPOINTS`, function () {
+xdescribe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
   const route = require('../../api/organization/routes')
