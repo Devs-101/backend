@@ -1,15 +1,18 @@
 const { Router } = require('express');
 const router = Router();
 
-const attendeesService = require('../../services/attendees.service')
+const verifyToken = require('../../utils/verifyToken');
+const { valideAttendees } = require('../../utils/verifiedData')
+
+const attendeesService = require('./service')
 
 function attendeesRoutes(app, store) {
   const AttendeesService = attendeesService(store)
 
   app.use('/attendees', router);
 
-  router.post('/', AttendeesService.createAttendees);
-  router.get('/', AttendeesService.readAllAttendees);
+  router.post('/:eventId/', valideAttendees, AttendeesService.registerAttendees);
+  router.get('/:eventId/', verifyToken, AttendeesService.getAllAttendees);
 
 }
 

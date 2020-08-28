@@ -107,3 +107,13 @@ exports.validateBroadcast = [
     next();
   }
 ];
+
+exports.valideAttendees = [
+  check('email').not().isEmpty().isEmail().withMessage('Email is required').normalizeEmail(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(403).json({ errors: errors.array()})
+    next();
+  },
+];
