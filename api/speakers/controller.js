@@ -31,9 +31,6 @@ module.exports = function (injectedStore) {
 
   async function deleteSpeaker(_id) {
     const item = await store.deleteOne({ _id });
-
-    console.log('item', item.deletedCount);
-
     return item.deletedCount || false;
   }
 

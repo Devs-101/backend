@@ -12,12 +12,6 @@ const eventsSchema = new Schema({
     required: [true, 'The description is required'],
     trim: true
   },
-  talks: [{
-    name: String,
-    description: String,
-    date: Date,
-    hour: Date,
-  }],
   eventStatus: {
     type: Boolean,
     default: false
@@ -74,7 +68,10 @@ const eventsSchema = new Schema({
     text: String,
     image: String
   },
-  attendees: Number,
+  deleted_at: {
+    type: Date,
+    default: null
+  },
   organizationId: {
     type: Schema.Types.ObjectId,
     ref: 'Organizations',
