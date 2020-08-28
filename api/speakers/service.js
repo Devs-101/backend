@@ -45,7 +45,7 @@ function speakerService(storeInjection) {
       response.success(req, res, newSpeaker, 201)
 
     } catch (error) {
-      res.send('error');
+      return error
     }
   };
 

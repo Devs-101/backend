@@ -18,7 +18,7 @@ function sponsorService(storeInjection) {
   const Controller = controller(store);
   const Events = events(eventsStore);
 
-  const registerSponsor = async (req, res, next) => {
+  const registerSponsor = async (req, res) => {
     const { body: data, params, file } = req;
 
     try {

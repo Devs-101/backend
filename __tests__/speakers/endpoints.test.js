@@ -1,15 +1,15 @@
 const testServer = require('../../utils/testServer');
 
-const baseRoute = '/sponsors';
-const baseMock = 'Sponsors';
+const baseRoute = '/speakers';
+const baseMock = 'Speakers';
 const eventId = '5f3c5f7944a4d553acb61740'
-const sponsorId = '5f448d646fd1395360789a9a'
+const speakerId = '5f4754d764701a63b0484e84'
 
 let token
 describe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
-  const route = require('../../api/sponsors/routes')
+  const route = require('../../api/speakers/routes')
   const request = testServer(route);
 
   beforeAll(async (done) =>{
@@ -53,7 +53,7 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
     });
 
     it(`[GET] Should return a specific ${baseMock}`, function(done) {
-      request.get(`${baseRoute}/${sponsorId}/get`)
+      request.get(`${baseRoute}/${speakerId}/get`)
         .set('x-access-token', token)
         .end((err, res) => {
           expect(res.body).toMatchObject({
@@ -67,10 +67,11 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
 
     it(`[POST] Should return a 400 Error`, function(done) {
       const data = {
-        name: 'Vue',
-        url: 'https://vuejs.org/',
-        logo: 'https://res.cloudinary.com/dnp43rl6a/image/upload/v1598328165/zcaxj2eo2havpj0tbwbk.png',
-        eventId: '5f42c4b914b927068cd8523d'
+        name: 'Speaker 1',
+        twitter: '@speaker1',
+        bio: 'Speaker Super Bio 1',
+        rol: 'Speaker Super Rol 1',
+        eventId: '5f3c5f7944a4d553acb61740',
       }
       request.post(`${baseRoute}/${eventId}2/new`)
         .set('x-access-token', token)
@@ -86,8 +87,11 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
 
     it(`[POST] Should return a 201 ${baseMock}`, function(done) {
       const data = {
-        name: 'Vue',
-        url: 'https://vuejs.org/'
+        name: 'Speaker 99',
+        twitter: '@speaker99',
+        bio: 'Speaker Super Bio 99',
+        rol: 'Speaker Super Rol 99',
+        eventId: '5f3c5f7944a4d553acb61740',
       }
       request.post(`${baseRoute}/${eventId}/new`)
         .set('x-access-token', token)
@@ -103,11 +107,13 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
 
     it(`[UPDATE] Should return a updated ${baseMock}`, function(done) {
       const data = {
-        name: 'Platzi',
-        url: 'https://www.platzi.com',
-        eventId: '5f42c4b914b927068cd8523d'
+        name: 'Speaker 007',
+        twitter: '@speaker007',
+        bio: 'Speaker Super Bio 007',
+        rol: 'Speaker Super Rol 007',
+        eventId: '5f3c5f7944a4d553acb61740',
       }
-      request.put(`${baseRoute}/${sponsorId}/update`)
+      request.put(`${baseRoute}/${speakerId}/update`)
         .set('x-access-token', token)
         .send(data).end((err, res) => {
           expect(res.body).toMatchObject({
@@ -120,7 +126,7 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
     });
 
     it(`[DELETE] should return the number of deleted ${baseMock} records`, function(done) {
-      request.delete(`${baseRoute}/${sponsorId}/delete`)
+      request.delete(`${baseRoute}/${speakerId}/delete`)
         .set('x-access-token', token)
         .end((err, res) => {
           expect(res.body).toStrictEqual({
