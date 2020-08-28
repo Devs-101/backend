@@ -86,7 +86,8 @@ exports.validateSpeaker = [
 exports.validateTalk = [
   check('name').not().isEmpty().withMessage('Talk name is required').escape(),
   check('description').not().isEmpty().withMessage('Description name is required').escape(),
-  check('dateHour').not().isEmpty().isISO8601().withMessage('The talk Date is required'),
+  check('initDate').not().isEmpty().isISO8601().withMessage('The talk Date is required'),
+  check('durationInMinutes').not().isEmpty().withMessage('Description name is required').escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
