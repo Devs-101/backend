@@ -20,15 +20,31 @@ module.exports = function (injectedStore) {
     return items || false;
   }
 
+  async function updateEvent(_id, data) {
+    const item = await store.findOneAndUpdate({ _id }, data, { 
+      new: true,
+      runValidators: true
+    });
+    return item || false
+  }
+
   async function publishEvent(_id) {
     const items = await store.findOneAndUpdate({ _id }, { eventStatus: true }, { new: true });
     return items || false;
+  }
+
+  async function erase (_id) {
+    await store.findOneAndUpdate({ _id }, { deleted_at: new Date() });
+    const getDeleted = await this.getEvent(_id)
+    return getDeleted
   }
 
   return {
     registerEventSave,
     getEvents,
     getEvent,
-    publishEvent
+    updateEvent,
+    publishEvent,
+    erase
   };
 };

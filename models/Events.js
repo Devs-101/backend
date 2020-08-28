@@ -68,7 +68,10 @@ const eventsSchema = new Schema({
     text: String,
     image: String
   },
-  attendees: Number,
+  deleted_at: {
+    type: Date,
+    default: null
+  },
   organizationId: {
     type: Schema.Types.ObjectId,
     ref: 'Organizations',
