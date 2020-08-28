@@ -75,8 +75,10 @@ function authService(storeInjection) {
   }
 
   const me = async (req, res) => {
+
     try {
       const user = await Controller.getUserById(req.body.userId);
+
       const organization = await Organization.getOrganizations(req.body.userId);
 
       if(!user || !organization) return res.status(401).send('Unauthorizer');

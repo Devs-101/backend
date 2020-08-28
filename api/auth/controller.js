@@ -6,19 +6,16 @@ module.exports = function (injectedStore) {
 
   const getUserById = async (userId) => {
     const user = await store.findById(userId, { password: 0 });
-
     return user || false
   }
 
   const isDuplicate = async (email) => {
     const findEmail = await store.findOne({ email });
-
     return findEmail || false
   }
 
   const validate = async (userPass, getPass) => {
     const match = await bcrypt.compare(getPass, userPass);
-
     return match
   }
 

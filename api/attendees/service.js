@@ -3,9 +3,8 @@ const response = require('../../utils/responses');
 function attendeesService(storeInjection) {
   const controller = require('./controller');
   let store = storeInjection;
-  if (!store) {
-    store = require('../__mocks__/mocks');
-  }
+
+  if (!store) store = require('../../__mocks__/attendees.mocks').Ateendees;
 
   const Controller = controller(storeInjection)
 
@@ -13,9 +12,8 @@ function attendeesService(storeInjection) {
     const { body: data } = req;
     const { params } = req;
 
-    data.eventId = params.eventId
-
     try {
+      data.eventId = params.eventId
       const newAttendee = await Controller.createAttendee(data)
       response.success(req, res, newAttendee, 201);
     } catch (error) {
