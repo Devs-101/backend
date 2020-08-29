@@ -1,5 +1,4 @@
 const testServer = require('../../utils/testServer');
-const { ConsoleReporter } = require('jasmine');
 
 const baseRoute = '/speakers';
 const baseMock = 'Speakers';
@@ -10,7 +9,7 @@ let token
 describe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
-  const route = require('../../api/speakers/routes')
+  const route = require('../../api/speakers/routes');
   const request = testServer(route);
 
   beforeAll(async (done) =>{

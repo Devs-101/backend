@@ -116,6 +116,7 @@ exports.valideAttendees = [
       return res.status(403).json({ errors: errors.array()})
     next();
   },
+];
 
 exports.validateOrganizator = [
   check('name').not().isEmpty().withMessage('Talk name is required').escape(),
@@ -126,5 +127,4 @@ exports.validateOrganizator = [
       return res.status(403).json({ errors: errors.array()})
     next();
   }
-]
 ];

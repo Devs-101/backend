@@ -19,7 +19,7 @@ module.exports = function (injectedStore) {
     return organization || false;
   }
 
-  async function register (data) {
+  async function registerOrganization (data) {
     const created = new store(data);
     await created.save();
   
@@ -27,13 +27,16 @@ module.exports = function (injectedStore) {
   }
 
 
-  async function update(_id, data) {
-    await store.findOneAndUpdate({ _id }, data);
-    const getUpdated = await this.getOrganization(_id)
-    return getUpdated
+  async function updateOrganization(_id, data) {
+    const items = await store.findOneAndUpdate({ _id }, data, {
+      new: true,
+      runValidators: true
+    });
+
+    return items || false;
   }
 
-  async function erase (_id) {
+  async function deleteOrganization(_id) {
     await store.findOneAndUpdate({ _id }, { deleted_at: new Date() });
     const getDeleted = await this.getOrganization(_id)
     return getDeleted
@@ -43,8 +46,8 @@ module.exports = function (injectedStore) {
     findOrganizations,
     getOrganizations,
     getOrganization,
-    register,
-    update,
-    erase
+    registerOrganization,
+    updateOrganization,
+    deleteOrganization
   };
 };

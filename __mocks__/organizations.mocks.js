@@ -31,12 +31,17 @@ class Organizations {
   }
 
   static find ({ userId }) {
-    return organizationsInfo.filter(item => item.userId === userId)[0];
+    return organizationsInfo;
+  }
+
+  static findOneAndUpdate({ _id }, data) {
+    return data
   }
 
   static findOne ({ _id }) {
     let res = false
     res = organizationsInfo.filter(item => item._id === _id)[0];
+    if(res) res.deleted_at = '2020-08-23T19:34:17.885Z'
     return res
   }
 

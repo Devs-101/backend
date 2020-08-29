@@ -1,21 +1,23 @@
 const controller = require('../../api/organization/controller')
 
-const { Organizations, organizationsInfo } = require('../../__mocks__/organizations.mocks')
+const { organizationsInfo } = require('../../__mocks__/organizations.mocks')
 
-const Controller = controller(Organizations)
+const Controller = controller()
 
 const baseMock ='Organizations'
+const userId = '5f42a2b78814a10955374ae3'
+const organizationId = '5f42a2b78814a10955374ae4'
 
-xdescribe(`[${baseMock}] FUNCTIONS`, function () {
+describe(`[${baseMock}] FUNCTIONS`, function () {
   describe(`Controller ${baseMock}`, function () {
     test(`[GET ALL] should return collection of objects`, () => {
-      return Controller.getOrganizations('5f42a2b78814a10955374ae3').then((organizations) => {
+      return Controller.getOrganizations(userId).then((organizations) => {
         expect(organizations).toStrictEqual(organizationsInfo);
       });
     });
 
     test(`[GET] should return only one ${baseMock}`, () => {
-      return Controller.getOrganization('5f42a2b78814a10955374ae4').then((organization) => {
+      return Controller.getOrganization(organizationId).then((organization) => {
         expect(organization).toStrictEqual(organizationsInfo[0]);
       });
     });
@@ -26,17 +28,30 @@ xdescribe(`[${baseMock}] FUNCTIONS`, function () {
       });
     });
 
+    test(`[UPDATE] should return updated info of ${baseMock}`, () => {
+      const data = {
+        name: 'Sevelte Conf 99',
+        description: 'The Biggest Svelte Conference Worldwide 99',
+      }
+      return Controller.updateOrganization(organizationId, data).then((organization) => {
+        expect(organization).toStrictEqual(data);
+      });
+    });
+
+    test(`[DELETE] should return the number of deleted ${baseMock} records`, () => {
+      return Controller.deleteOrganization(organizationId).then((organization) => {
+        expect(organization).toStrictEqual(organizationsInfo[0]);
+      });
+    });
+
     test('[CREATE] should return object events created', () => {
       const create = {
         _id: '5f42a5ec4496161f1192bc99',
         name: 'Sevelte Conf',
         description: 'The Biggest Svelte Conference Worldwide',
-        logo: 'https://javascript-conference.com/wp-content/uploads/2020/02/iJS_LDN20_Blog_56509_v1.jpg',
-        userId: '5f42a2b78814a10955374ae3',
-        createdAt: '2020-08-23T17:09:12.014Z',
-        updatedAt: '2020-08-23T17:09:12.014Z'
+        userId: '5f42a2b78814a10955374ae3'
       };
-      return Controller.register(create).then((organization) => {
+      return Controller.registerOrganization(create).then((organization) => {
         expect(organization.data).toStrictEqual(create)
       });
     });

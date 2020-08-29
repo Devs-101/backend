@@ -5,34 +5,32 @@ function organizationService(storeInjection) {
 
   let store = storeInjection;
 
-  if (!store) {
-    store =  require('../../__mocks__/organizations.mocks').Organizations;
-  }
+  if (!store) store =  require('../../__mocks__/organizations.mocks').Organizations;
 
   const Controller = controller(store)
   
-  const register = async (req, res) => {
+  const registerOrganization = async (req, res) => {
     const { body: data } = req;
 
     try {
-      const register = await Controller.register(data);
+      const register = await Controller.registerOrganization(data);
       response.success(req, res, register, 201);
     } catch (error) {
       response.error(req, res, error, 422);
     }
   };
 
-  const readAll = async (req, res) => {
-    const { body: data } = req;
+  const getAllOrganizations = async (req, res) => {
+    const { params } = req;
     try {
-      const organizations = await Controller.getOrganizations(data.userId)
+      const organizations = await Controller.getOrganizations(params.userId)
       response.success(req, res, organizations, 201);
     } catch (error) {
       response.error(req, res, error.errors, 400)
     }
   };
 
-  const read = async (req, res) => {
+  const getOrganization = async (req, res) => {
     const { params } = req;
 
     try {
@@ -50,50 +48,46 @@ function organizationService(storeInjection) {
     }
   };
 
-
-  const update = async (req, res) => {
+  const updateOrganization = async (req, res) => {
     const { params } = req;
     const { body: data } = req;
 
     try {
-      const organizations = await Controller.update(params.organizationId, data)
-      if (organizations) {
-        response.success(req, res, organizations, 200);
-      } else {
-        response.error(req, res, [{
-          "msg": "Organization not found",
-          "param": "ORGANIZATION_NOT_FOUND"
-        }], 400)
-      }
+      const organizations = await Controller.updateOrganization(params.organizationId, data)
+      if (!organizations) response.error(req, res, [{
+        "msg": "Organization not found",
+        "param": "ORGANIZATION_NOT_FOUND"
+      }], 400)
+
+      response.success(req, res, organizations, 200);
     } catch (error) {
       response.error(req, res, error.errors, 400)
     }
   };
 
-  const erase = async (req, res) => {
+  const deleteOrganization = async (req, res) => {
     const { params } = req;
 
     try {
-      const organizations = await Controller.erase(params.organizationId)
-      if (organizations) {
-        response.success(req, res, organizations, 201);
-      } else {
-        response.error(req, res, [{
-          "msg": "Organization not found",
-          "param": "ORGANIZATION_NOT_FOUND"
-        }], 400)
-      }
+      const organizations = await Controller.deleteOrganization(params.organizationId)
+      if (!organizations) response.error(req, res, [{
+        "msg": "Organization not found",
+        "param": "ORGANIZATION_NOT_FOUND"
+      }], 400)
+
+        
+      response.success(req, res, organizations, 201);
     } catch (error) {
       response.error(req, res, error.errors, 400)
     }
   };
 
   return {
-    register,
-    readAll,
-    read,
-    update,
-    erase
+    registerOrganization,
+    getAllOrganizations,
+    getOrganization,
+    updateOrganization,
+    deleteOrganization
   }
 }
 

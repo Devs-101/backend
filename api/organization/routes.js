@@ -10,11 +10,11 @@ function organizationRoutes(app, store) {
 
   app.use('/organizations', router);
 
-  router.post('/', verifyToken, validateOrganization, OrganizationsService.register);
-  router.get('/', verifyToken, OrganizationsService.readAll);
-  router.get('/:organizationId', verifyToken, OrganizationsService.read);
-  router.put('/:organizationId', verifyToken, validateOrganization, OrganizationsService.update);
-  router.delete('/:organizationId', verifyToken, OrganizationsService.erase);
+  router.post('/:userId/new', verifyToken, validateOrganization, OrganizationsService.registerOrganization);
+  router.get('/:userId/', verifyToken, OrganizationsService.getAllOrganizations);
+  router.get('/:organizationId/get', verifyToken, OrganizationsService.getOrganization);
+  router.put('/:organizationId/update', verifyToken, validateOrganization, OrganizationsService.updateOrganization);
+  router.delete('/:organizationId/delete', verifyToken, OrganizationsService.deleteOrganization);
 
 }
 

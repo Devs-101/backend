@@ -12,6 +12,8 @@ function attendeesService(storeInjection) {
     const { body: data } = req;
     const { params } = req;
 
+    console.log('registerAttendees')
+
     try {
       data.eventId = params.eventId
       const newAttendee = await Controller.createAttendee(data)
