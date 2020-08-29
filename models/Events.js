@@ -55,6 +55,9 @@ const eventsSchema = new Schema({
   fullUrl: {
     type: String
   },
+  img: {
+    type: String
+  },
   organizators: [{
     name: String,
     avatar: String,

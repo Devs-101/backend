@@ -1,4 +1,7 @@
 const response = require('../../utils/responses');
+const cloudinary = require('cloudinary');
+const fs = require('fs-extra');
+const { defaultImages } = require('../../utils/defaultImages');
 
 function eventsService(storeInjection) {
   const controller = require('./controller')
@@ -18,12 +21,17 @@ function eventsService(storeInjection) {
   const Organization = organization(organizationStore)
   
   const registerEvent = async (req, res) => {
-    const { body: data } = req;
-    const { params: params } = req;
+    const { body: data, params, file } = req;
     
     try {
       const findOrganization = await Organization.findOrganizations(params.organizationId);
       data.organizationId = findOrganization
+      data.img = defaultImages.events;
+      if (file) {
+        const avatarImg = await cloudinary.v2.uploader.upload(file.path);
+        data.img = avatarImg.secure_url;
+        await fs.unlink(file.path);
+      }
   
       if (findOrganization) {
         const newEvent = await Controller.registerEventSave(data);
@@ -36,7 +44,7 @@ function eventsService(storeInjection) {
             "msg": "Organization Id is required",
             "param": "organizationID"
           }],
-          200
+          404
         );
       }
     } catch (error) {
@@ -69,9 +77,14 @@ function eventsService(storeInjection) {
   }
 
   const updateEvent = async (req, res) => {
-    const { body: data, params } = req;
+    const { body: data, params, file } = req;
   
     try {
+      if(file) {
+        const avatarImg = await cloudinary.v2.uploader.upload(file.path);
+        data.img = avatarImg.secure_url;
+        await fs.unlink(file.path);
+      }
       const event = await Controller.updateEvent(params.eventId, data);
       if(!event) response.error(req, res, [ 'ERROR_ON_UPDATE_EVENT' ], 400);
 
