@@ -6,7 +6,6 @@ module.exports = function (injectedStore) {
   async function registerOrganizator(body) {
     const item = new store(body);
     await item.save();
-
     return item || false;
   }
 

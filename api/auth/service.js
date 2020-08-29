@@ -1,4 +1,5 @@
 const response = require('../../utils/responses');
+const sendWelcomeEmail = require('../../utils/emailSender')
 
 function authService(storeInjection) {
   const controller = require('./controller')
@@ -29,7 +30,6 @@ function authService(storeInjection) {
     } else {
       try {
         const findEmail = await Controller.isDuplicate(data.email)
-      
         if(findEmail) res.status(409).json({ errors: [{
             value: data.email,
             msg: 'Some fields are incorrect.'
@@ -49,6 +49,7 @@ function authService(storeInjection) {
 
         const token = jwt.sign({id: newUser._id}, JWT_SECRET, { expiresIn: 60 * 60 * 24 })
 
+        //await sendWelcomeEmail(newUser);
         response.success(req, res, { user: newUser, organization: newOrganization, token }, 201);
       } catch (error) {
         return error
