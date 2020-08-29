@@ -44,7 +44,7 @@ function authService(storeInjection) {
           userId: newUser._id
         }
 
-        const newOrganization = await Organization.register(organizationInfo);
+        const newOrganization = await Organization.registerOrganization(organizationInfo);
         if (!newOrganization) response.error(req, res,[ 'ERROR_NO_NEW_ORGANIZATION_SAVE' ], 400)
 
         const token = jwt.sign({id: newUser._id}, JWT_SECRET, { expiresIn: 60 * 60 * 24 })
