@@ -7,6 +7,7 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary');
 const cors = require('cors')
+const helmet = require('helmet');
 
 const authRoutes = require('./api/auth/routes');
 const broadcastRoutes = require('./api/broadcast/routes')
@@ -17,7 +18,6 @@ const sponsorRoutes = require('./api/sponsors/routes');
 const speakerRoutes = require('./api/speakers/routes');
 const talkRoutes = require('./api/talks/routes');
 const organizatorRoutes = require('./api/organizators/routes');
-
 
 const Attendees = require('./models/Attendees');
 const Events = require('./models/Events');
@@ -37,6 +37,8 @@ cloudinary.config({
   api_key: API_KEY,
   api_secret: API_SECRET
 });
+
+app.use(helmet())
 
 // Middlewares
 const storage = multer.diskStorage({

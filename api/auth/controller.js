@@ -22,11 +22,7 @@ module.exports = function (injectedStore) {
   const save = async (body) => {
     console.log(store)
     const newUser = new store(body);
-    //newUser.name = body.uname
-    console.log(newUser)
     await newUser.save();
-    console.log('1::', newUser)
-
     return newUser
   }
 
