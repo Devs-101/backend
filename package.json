@@ -21,6 +21,7 @@
     "express-slash": "^2.0.1",
     "express-validator": "^6.6.1",
     "fs-extra": "^9.0.1",
+    "helmet": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.0",
     "multer": "^1.4.2",
