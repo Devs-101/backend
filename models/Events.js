@@ -55,11 +55,6 @@ const eventsSchema = new Schema({
   fullUrl: {
     type: String
   },
-  organizators: [{
-    name: String,
-    avatar: String,
-    rol: String
-  }],
   bannerOrHeader: {
     isBanner: {
       // True is banner, false is header
