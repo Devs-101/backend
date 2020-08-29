@@ -68,6 +68,22 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
       });
     });
 
+    it(`[POST] /login Should return a verifiedData error`, function(done) {
+      const register = {
+        email: null,
+        password: null
+      }
+      request.post(`${baseRoute}/login`)
+        .set('x-access-token', token)
+        .send(register)
+        .end((err, res) => {
+          expect(res.body).toMatchObject({
+            errors: expect.any(Array)
+          });
+          done();
+      });
+    });
+
     it(`[POST] /register return error PASSWORD MUST BE EQUAL`, function(done) {
       const register = {
         email: 'alejandro.ortiz2@onevent.xyz',
@@ -75,6 +91,25 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
         confirm_password: '123456',
         user_name: 'Alejandro Ortiz',
         organization_name: 'Devs 101'
+      }
+      request.post(`${baseRoute}/register`)
+        .set('x-access-token', token)
+        .send(register)
+        .end((err, res) => {
+          expect(res.body).toMatchObject({
+            errors: expect.any(Array)
+          });
+          done();
+      });
+    });
+
+    it(`[POST] /register Should return a verifiedData error`, function(done) {
+      const register = {
+        email: null,
+        password: null,
+        confirm_password: null,
+        user_name: null,
+        organization_name: null
       }
       request.post(`${baseRoute}/register`)
         .set('x-access-token', token)

@@ -51,6 +51,20 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
       });
     });
 
+    it(`[POST] Should return a verifiedData error`, function(done) {
+      const createAttendee = {
+        email: null,
+      }
+      request.post(`${baseRoute}/${eventId}`)
+        .set('x-access-token', token)
+        .send(createAttendee).end((err, res) => {
+          expect(res.body).toMatchObject({
+            errors: expect.any(Array)
+          });
+          done();
+      });
+    });
+
     it(`[POST] Should return a 201 ${baseMock}`, function(done) {
       const createAttendee = {
         email: 'juan_pablo@gmail.com',

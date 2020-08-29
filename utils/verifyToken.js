@@ -12,7 +12,7 @@ function verifyToken (req, res, next) {
       req.body.userId = decoded.id;
       next();
     } catch (error) {
-      res.send('No valid token')
+      response.error(req, res, 'INVALID TOKEN', 401)
     }
   }
 }

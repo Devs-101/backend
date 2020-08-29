@@ -84,6 +84,21 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
       });
     });
 
+    it(`[POST] Should return a verifiedData error`, function(done) {
+      const data = {
+        name: null,
+        url: null
+      }
+      request.post(`${baseRoute}/${eventId}/new`)
+        .set('x-access-token', token)
+        .send(data).end((err, res) => {
+          expect(res.body).toMatchObject({
+            errors: expect.any(Array)
+          });
+          done();
+      });
+    });
+
     it(`[POST] Should return a 201 ${baseMock}`, function(done) {
       const data = {
         name: 'Vue',

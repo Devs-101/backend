@@ -1,4 +1,5 @@
 const testServer = require('../../utils/testServer');
+const { ConsoleReporter } = require('jasmine');
 
 const baseRoute = '/speakers';
 const baseMock = 'Speakers';
@@ -34,6 +35,19 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
             error: expect.any(String),
             status: expect.any(Number),
             data: expect.any(Boolean)
+          });
+          done();
+      });
+    });
+
+    it(`[GET] Error NO VALID TOKEN`, function(done) {
+      request.get(`${baseRoute}/${eventId}`)
+        .set('x-access-token', '123456')
+        .end((err, res) => {
+          expect(res.body).toMatchObject({ 
+            error: expect.any(String),
+            status: 401,
+            data: false
           });
           done();
       });
@@ -80,6 +94,23 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
             data: false,
             error: expect.any(Array),
             status: 400
+          });
+          done();
+      });
+    });
+
+    it(`[POST] Should return a verifiedData error`, function(done) {
+      const data = {
+        name: null,
+        twitter: null,
+        bio: null,
+        rol: null,
+      }
+      request.post(`${baseRoute}/${eventId}/new`)
+        .set('x-access-token', token)
+        .send(data).end((err, res) => {
+          expect(res.body).toMatchObject({
+            errors: expect.any(Array)
           });
           done();
       });
