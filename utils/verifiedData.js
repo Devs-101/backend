@@ -128,3 +128,14 @@ exports.validateOrganizator = [
     next();
   }
 ];
+
+exports.validateUpdateUser = [
+  check('name').not().isEmpty().withMessage('Talk name is required').escape(),
+  check('img').isEmpty().withMessage('Image is required').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(403).json({ errors: errors.array()})
+    next();
+  }
+];
