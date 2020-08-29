@@ -18,7 +18,7 @@ const usersSchema = new Schema({
     required: true,
     trim: true
   },
-  avatar: {
+  img: {
     type: String
   }
 }, {timestamps: true});
