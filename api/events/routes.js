@@ -15,7 +15,7 @@ function eventRoutes(app, store) {
   router.get('/:eventId/get', verifyToken, EventsService.getEvent);
   router.put('/:eventId/update', verifyToken, validateEvent, EventsService.updateEvent);
   router.get('/:eventId/publish', verifyToken, EventsService.publish);
-  router.delete('/:eventId/', verifyToken, EventsService.erase);
+  router.delete('/:eventId/delete', verifyToken, EventsService.erase);
 }
 
 module.exports = eventRoutes;

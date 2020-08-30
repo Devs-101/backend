@@ -21,10 +21,7 @@ module.exports = function (injectedStore) {
   }
 
   async function updateEvent(_id, data) {
-    const item = await store.findOneAndUpdate({ _id }, data, { 
-      new: true,
-      runValidators: true
-    });
+    const item = await store.findOneAndUpdate({ _id }, data, { new: true, runValidators: true });
     return item || false
   }
 

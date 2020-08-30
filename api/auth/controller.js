@@ -20,7 +20,6 @@ module.exports = function (injectedStore) {
   }
 
   const save = async (body) => {
-    console.log(store)
     const newUser = new store(body);
     await newUser.save();
     return newUser

@@ -29,15 +29,10 @@ function eventsService(storeInjection) {
         const newEvent = await Controller.registerEventSave(data);
         response.success(req, res, newEvent, 201);
       } else {
-        response.error(
-          req,
-          res,
-          [{
+        response.error(req, res, [{
             "msg": "Organization Id is required",
             "param": "organizationID"
-          }],
-          200
-        );
+          }], 200);
       }
     } catch (error) {
       console.log(error)
@@ -54,17 +49,14 @@ function eventsService(storeInjection) {
   };
 
   const getEvent = async (req, res, next) => {
+    const { params } = req;
     try {
-      const event = await Controller.getEvent(req.params.eventId);
+      const event = await Controller.getEvent(params.eventId);
   
       if (!event) response.error(req, res, [ 'NO_EVENT' ], 400);
       response.success(req, res, event, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.eventId,
-            msg: 'Incorrect data error',
-            param: 'eventId'
-      }]}))
+      return error
     }
   }
 
@@ -82,7 +74,7 @@ function eventsService(storeInjection) {
   }
 
   const publish = async (req, res) => {
-    const { params: params } = req;
+    const { params } = req;
 
     try {
       const event = await Controller.getEvent(params.eventId);
@@ -119,10 +111,8 @@ function eventsService(storeInjection) {
   const erase = async (req, res) => {
     const { params } = req;
 
-    console.log(params)
     try {
       const event = await Controller.erase(params.eventId)
-      console.log(event)
       response.success(req, res, event, 201);
     } catch (error) {
       response.error(req, res, error.errors, 400)
