@@ -35,10 +35,14 @@ const eventsSchema = new Schema({
       type: String,
       default: 'Thanks to register to my event.'
     },
-    image: {
+    img: {
       type: String,
       default: 'image.png'
     },
+  },
+  img: {
+    type: String,
+    default: 'image.png'
   },
   countDown: {
     type: Boolean,
@@ -61,7 +65,7 @@ const eventsSchema = new Schema({
       type: Boolean,
     },
     text: String,
-    image: String
+    img: String
   },
   deleted_at: {
     type: Date,
