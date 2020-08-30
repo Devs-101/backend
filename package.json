@@ -13,6 +13,9 @@
   "author": "Raziel Carvajal <razielco@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@hapi/boom": "^9.1.0",
+    "@sendgrid/mail": "^7.2.4",
+    "@sentry/node": "^5.22.3",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.22.0",
     "cors": "^2.8.5",
@@ -21,6 +24,7 @@
     "express-slash": "^2.0.1",
     "express-validator": "^6.6.1",
     "fs-extra": "^9.0.1",
+    "helmet": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.0",
     "multer": "^1.4.2",

@@ -3,37 +3,100 @@ const testServer = require('../../utils/testServer')
 
 const baseRoute ='/events'
 const baseMock ='Events'
+const organizationId = '5f42a2b78814a10955374ae4';
+const eventId = '5f3c5f7944a4d553acb61740';
+const eventIdNoPublish ='5f42c4ba14b927068cd8523f991'
+const organizationIdFake ='5f42a2b78814a10955374ae5'
 
 let token
 
-xdescribe(`[${baseMock}] ENDPOINTS`, function () {
+describe(`[${baseMock}] ENDPOINTS`, function () {
   jest.setTimeout(10000);
 
   const route = require('../../api/events/routes')
   const request = testServer(route);
 
+  beforeAll(async (done) =>{
+    const userAccess = {
+      email: 'walter.salas@onevent.xyz',
+      password: '123456'
+    }
+
+    const routeLogin = require('../../api/auth/routes');
+    const requestLogin = testServer(routeLogin);
+    const data = await requestLogin.post('/auth/login/').send(userAccess);
+    token = data.body.data.token;
+    done();
+  })
+
+
   describe(`Routes ${baseMock}`, function () {
-    /*
-    beforeAll(async (done) =>{
-      const userAccess = {
-        email: 'razier2rww22@gmail.com',
-        password: '123456'
-      }
-      const requestLogin = testServer(routeLogin);
-      //const data = await requestLogin.post('/auth/login/').send(userAccess)
-      //console.log('data:;::: ', data.body)
-      //token = data.body.token;
-      done();
-    })
-    */
-
-
     it(`[GET] Should return a collection of ${baseMock}`, function(done) {
-      request.get(`${baseRoute}/5f42a2b78814a10955374ae4/get`).set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNDJhNWVjNDQ5NjE2MWYxMTkyYmNlYiIsImlhdCI6MTU5ODIyMjQ4NywiZXhwIjoxNTk4MzA4ODg3fQ.tOIoDJvlG6Ks0bEgJsq3bi-252ikjAmbUlJgptQUtM4').end((err, res) => {
+      request.get(`${baseRoute}/${organizationId}/`)
+        .set('x-access-token', token)
+        .end((err, res) => {
         expect(res.body).toMatchObject({
           error: expect.any(Boolean),
           status: expect.any(Number),
           data: expect.any(Array)
+        });
+        done();
+      });
+    });
+
+    it(`[GET] Should return a object of ${baseMock}`, function(done) {
+      request.get(`${baseRoute}/${eventId}/get`)
+        .set('x-access-token', token)
+        .end((err, res) => {
+        expect(res.body).toMatchObject({
+          error: expect.any(Boolean),
+          status: expect.any(Number),
+          data: expect.any(Object)
+        });
+        done();
+      });
+    });
+
+    it(`[GET] Should return a NOT FOUND ERROR of ${baseMock}`, function(done) {
+      request.get(`${baseRoute}/${eventId}99/get`)
+        .set('x-access-token', token)
+        .end((err, res) => {
+        expect(res.body).toMatchObject({
+          error: expect.any(Array),
+          status: expect.any(Number),
+          data: expect.any(Boolean)
+        });
+        done();
+      });
+    });
+
+    it(`[POST] Should return a verifiedData error`, function(done) {
+      const create = {
+        name: null,
+        description: null,
+      };
+      request.post(`${baseRoute}/${organizationId}/new`)
+      .set('x-access-token', token)
+      .send(create)
+      .end((err, res) => {
+        expect(res.body).toMatchObject({
+          errors: expect.any(Array)
+        });
+        done();
+      });
+    });
+
+    it(`[POST] Should return a organizationID required error`, function(done) {
+      const create = {
+        name: null,
+        description: null,
+      };
+      request.post(`${baseRoute}/${organizationIdFake}/new`)
+      .set('x-access-token', token)
+      .send(create)
+      .end((err, res) => {
+        expect(res.body).toMatchObject({
+          errors: expect.any(Array)
         });
         done();
       });
@@ -47,14 +110,11 @@ xdescribe(`[${baseMock}] ENDPOINTS`, function () {
         allowRegister: true,
         name: 'Evento Vue',
         description: 'Esto es un super evento de Vue.',
-        talks: [],
         dateHour: {
-          initDate: '2020-08-01T23:30:00.000Z',
-          endDate: '2020-08-01T23:30:00.000Z'
+          initDate: '2020-09-01T23:30:00.000Z',
+          endDate: '2020-09-10T23:30:00.000Z'
         },
         theme: 'omnitrix',
-        broadcast: [],
-        sponsors: [],
         slug: 'super-slug-supernew-4',
         fullUrl: 'fullUrl',
         organizators: [],
@@ -62,8 +122,8 @@ xdescribe(`[${baseMock}] ENDPOINTS`, function () {
         createdAt: '2020-08-23T19:34:17.885Z',
         updatedAt: '2020-08-23T19:34:17.885Z'
       };
-      request.post(`${baseRoute}/5f42a2b78814a10955374ae4/new`)
-      .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNDJhNWVjNDQ5NjE2MWYxMTkyYmNlYiIsImlhdCI6MTU5ODIyMjQ4NywiZXhwIjoxNTk4MzA4ODg3fQ.tOIoDJvlG6Ks0bEgJsq3bi-252ikjAmbUlJgptQUtM4')
+      request.post(`${baseRoute}/${organizationId}/new`)
+      .set('x-access-token', token)
       .send(create)
       .end((err, res) => {
         expect(res.body).toMatchObject({
@@ -72,6 +132,59 @@ xdescribe(`[${baseMock}] ENDPOINTS`, function () {
           data: expect.any(Object)
         });
         done();
+      });
+    });
+
+    it(`[UPDATE] Should return a updated ${baseMock}`, function(done) {
+      const data = {
+        _id: '5f3c5f7944a4d553acb61740',
+        eventStatus: false,
+        countDown: true,
+        allowRegister: true,
+        name: 'Evento Vue',
+        description: 'Esto es un super evento de Vue.',
+        dateHour: {
+          initDate: '2020-09-01T23:30:00.000Z',
+          endDate: '2020-09-10T23:30:00.000Z'
+        },
+        deleted_at: null,
+        theme: 'omnitrix',
+        slug: 'super-slug-supernew-4',
+        fullUrl: 'fullUrl',
+        organizators: [],
+        organizationId: '5f42a2b78814a10955374ae4'
+      }
+      request.put(`${baseRoute}/${eventId}/update`)
+        .set('x-access-token', token)
+        .send(data).end((err, res) => {
+          expect(res.body).toMatchObject({
+            data: expect.any(Object),
+            error: false,
+            status: 200
+          });
+          done();
+      });
+    });
+
+    it(`[PUBLISH] Should return INCOMPLETE event error ${baseMock}`, function(done) {
+      request.get(`${baseRoute}/${eventIdNoPublish}/publish`)
+        .set('x-access-token', token)
+        .end((err, res) => {
+          expect(res.body).toMatchObject({
+            data: expect.any(Boolean),
+            error: expect.any(Array),
+            status: 400
+          });
+          done();
+      });
+    });
+
+    it(`[DELETE] should return the number of deleted ${baseMock} records`, function(done) {
+      request.delete(`${baseRoute}/${eventId}/delete`)
+        .set('x-access-token', token)
+        .end((err, res) => {
+          expect(res.body.deleted_at).toString()
+          done();
       });
     });
 

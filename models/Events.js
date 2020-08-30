@@ -35,10 +35,14 @@ const eventsSchema = new Schema({
       type: String,
       default: 'Thanks to register to my event.'
     },
-    image: {
+    img: {
       type: String,
       default: 'image.png'
     },
+  },
+  img: {
+    type: String,
+    default: 'image.png'
   },
   countDown: {
     type: Boolean,
@@ -58,18 +62,13 @@ const eventsSchema = new Schema({
   img: {
     type: String
   },
-  organizators: [{
-    name: String,
-    avatar: String,
-    rol: String
-  }],
   bannerOrHeader: {
     isBanner: {
       // True is banner, false is header
       type: Boolean,
     },
     text: String,
-    image: String
+    img: String
   },
   deleted_at: {
     type: Date,

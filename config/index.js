@@ -11,6 +11,11 @@ const config = {
   CLOUD_NAME: process.env.CLOUD_NAME,
   API_KEY: process.env.API_KEY,
   API_SECRET: process.env.API_SECRET,
+  SENDGRID_API: process.env.SENDGRID_API,
+  SENDGRID_WELCOME_TEMPLATE: process.env.SENDGRID_WELCOME_TEMPLATE,
+  SENDGRID_SENDER_EMAIL: process.env.SENDGRID_SENDER_EMAIL,
+  SENTRY_DNS: process.env.SENTRY_DNS,
+  SENTRY_ID: process.env.SENTRY_ID,
 }
 
 module.exports = config

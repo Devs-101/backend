@@ -1,4 +1,5 @@
 const response = require('../../utils/responses');
+const sendWelcomeEmail = require('../../utils/emailSender')
 
 function authService(storeInjection) {
   const controller = require('./controller')
@@ -18,7 +19,7 @@ function authService(storeInjection) {
 
   const { JWT_SECRET } = require('../../config/index');
 
-  const register = async (req, res) => {
+  const register = async (req, res, next) => {
     const { body: data } = req;
 
     if(data.password !== data.confirm_password) {
@@ -29,7 +30,6 @@ function authService(storeInjection) {
     } else {
       try {
         const findEmail = await Controller.isDuplicate(data.email)
-      
         if(findEmail) res.status(409).json({ errors: [{
             value: data.email,
             msg: 'Some fields are incorrect.'
@@ -44,19 +44,20 @@ function authService(storeInjection) {
           userId: newUser._id
         }
 
-        const newOrganization = await Organization.register(organizationInfo);
+        const newOrganization = await Organization.registerOrganization(organizationInfo);
         if (!newOrganization) response.error(req, res,[ 'ERROR_NO_NEW_ORGANIZATION_SAVE' ], 400)
 
         const token = jwt.sign({id: newUser._id}, JWT_SECRET, { expiresIn: 60 * 60 * 24 })
 
+        //await sendWelcomeEmail(newUser);
         response.success(req, res, { user: newUser, organization: newOrganization, token }, 201);
       } catch (error) {
-        return error
+        next(error);
       }
     }
   }
 
-  const login = async (req, res) => {
+  const login = async (req, res, next) => {
     const { body: data } = req;
 
     try {
@@ -70,11 +71,11 @@ function authService(storeInjection) {
 
       response.success(req, res, { auth: true, token }, 200);
     } catch (error) {
-      return error
+      next(error);
     }
   }
 
-  const me = async (req, res) => {
+  const me = async (req, res, next) => {
 
     try {
       const user = await Controller.getUserById(req.body.userId);
@@ -86,7 +87,7 @@ function authService(storeInjection) {
       response.success(req, res, { user, organization }, 200);
       
     } catch (error) {
-      res.send('Error');
+      next(error);
     }
   }
 

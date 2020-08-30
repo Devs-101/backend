@@ -1,7 +1,7 @@
 const { check, validationResult } = require('express-validator');
 
 exports.validateUser = [
-  check('user_name').not().isEmpty().withMessage('Name is required').escape(),
+  check('name').not().isEmpty().withMessage('Name is required').escape(),
   check('organization_name').not().isEmpty().withMessage('Organization name is required').escape(),
   check('email').not().isEmpty().isEmail().withMessage('Email is required').normalizeEmail(),
   check('password').not().isEmpty().withMessage('Password is required').escape(),
@@ -119,6 +119,17 @@ exports.valideAttendees = [
 ];
 
 exports.validateOrganizator = [
+  check('name').not().isEmpty().withMessage('Talk name is required').escape(),
+  check('img').isEmpty().withMessage('Image is required').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(403).json({ errors: errors.array()})
+    next();
+  }
+];
+
+exports.validateUpdateUser = [
   check('name').not().isEmpty().withMessage('Talk name is required').escape(),
   check('img').isEmpty().withMessage('Image is required').escape(),
   (req, res, next) => {
