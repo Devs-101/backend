@@ -19,15 +19,11 @@ function userService(storeInjection) {
       if(!user) response.error(req, res, [ 'NO_USER' ], 400);
       response.success(req, res, user, 200);
     } catch (error) {
-      next(res.send({error: [{
-        value: req.body._id,
-        msg: 'Incorrect data error',
-        param: '_id'
-      }]}))
+      next(error);
     }
   };
 
-  const updateUser = async(req, res) => {
+  const updateUser = async(req, res, next) => {
     const { body: data, file, params } =req;
     
     data.img = defaultImages.users;
@@ -43,7 +39,7 @@ function userService(storeInjection) {
 
       response.success(req, res, user, 200);
     } catch (error) {
-      response.error(req, res, [' ERROR_UPDATE_USER '], 403)
+      next(error);
     }
   };
 

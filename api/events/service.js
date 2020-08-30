@@ -17,7 +17,7 @@ function eventsService(storeInjection) {
   const Controller = controller(store)
   const Organization = organization(organizationStore)
   
-  const registerEvent = async (req, res) => {
+  const registerEvent = async (req, res, next) => {
     const { body: data } = req;
     const { params: params } = req;
     
@@ -35,16 +35,16 @@ function eventsService(storeInjection) {
           }], 200);
       }
     } catch (error) {
-      console.log(error)
+      next(error);
     }
   };
 
-  const getAllEvents = async (req, res) => {
+  const getAllEvents = async (req, res, next) => {
     try {
       const events = await Controller.getEvents();
       response.success(req, res, events, 201);
     } catch (error) {
-      response.error(req, res, error.errors, 400)
+      next(error);
     }
   };
 
@@ -56,11 +56,11 @@ function eventsService(storeInjection) {
       if (!event) response.error(req, res, [ 'NO_EVENT' ], 400);
       response.success(req, res, event, 200);
     } catch (error) {
-      return error
+      next(error);
     }
   }
 
-  const updateEvent = async (req, res) => {
+  const updateEvent = async (req, res, next) => {
     const { body: data, params } = req;
   
     try {
@@ -69,11 +69,11 @@ function eventsService(storeInjection) {
 
       response.success(req, res, event, 200);
     } catch (error) {
-      response.error(req, res, [ 'ERROR_UPDATE_EVENT' ], 403);
+      next(error);
     }
   }
 
-  const publish = async (req, res) => {
+  const publish = async (req, res, next) => {
     const { params } = req;
 
     try {
@@ -104,18 +104,18 @@ function eventsService(storeInjection) {
         response.error(req, res, [ 'EVENT_NOT_FOUND' ], 400)
       }
     } catch (error) {
-      response.error(req, res, [ 'EVENT_NOT_FOUND' ], 400)
+      next(error);
     }
   };
 
-  const erase = async (req, res) => {
+  const erase = async (req, res, next) => {
     const { params } = req;
 
     try {
       const event = await Controller.erase(params.eventId)
       response.success(req, res, event, 201);
     } catch (error) {
-      response.error(req, res, error.errors, 400)
+      next(error);
     }
   };
 

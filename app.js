@@ -9,6 +9,13 @@ const cloudinary = require('cloudinary');
 const cors = require('cors')
 const helmet = require('helmet');
 
+const {
+  notFoundHandler,
+  logErrors,
+  wrapErrors,
+  errorHandler
+} = require('./utils/errorHandlers')
+
 const authRoutes = require('./api/auth/routes');
 const userRoutes = require('./api/user/routes');
 const broadcastRoutes = require('./api/broadcast/routes')
@@ -65,5 +72,10 @@ organizationRoutes(app, Organizations);
 organizatorRoutes(app, Organizators);
 
 app.use(slash());
+
+app.use(notFoundHandler);
+app.use(logErrors);
+app.use(wrapErrors);
+app.use(errorHandler);
 
 module.exports = app;

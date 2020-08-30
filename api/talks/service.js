@@ -20,7 +20,7 @@ function talksService(storeInjection) {
   const Events = events(eventsStore);
   const Speakers = speakers(speakersStore);
 
-  const registerTalk = async(req, res) => {
+  const registerTalk = async(req, res, next) => {
     const { body: data, params } = req;
   
     try {
@@ -45,7 +45,7 @@ function talksService(storeInjection) {
   
         response.success(req, res, newTalk, 201);
     } catch (error) {
-      error
+      next(error);
     }
   };
 
@@ -58,11 +58,7 @@ function talksService(storeInjection) {
       if (!talks) response.error(req, res, [ 'NO_TALKS' ], 400);
       response.success(req, res, talks, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.eventId,
-            msg: 'Incorrect data error',
-            param: 'eventId'
-      }]}))
+      next(error);
     }
   };
 
@@ -73,15 +69,11 @@ function talksService(storeInjection) {
       if (!talk) response.error(req, res, [ 'NO_TALKS' ], 400);
       response.success(req, res, talk, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.talkId,
-            msg: 'Incorrect data error',
-            param: 'talkId'
-      }]}))
+      next(error);
     }
   };
 
-  const updateTalk = async (req, res) => {
+  const updateTalk = async (req, res, next) => {
     const { body: data, params } = req;
   
     try {
@@ -90,11 +82,11 @@ function talksService(storeInjection) {
 
       response.success(req, res, talk, 200);
     } catch (error) {
-      response.error(req, res, [ 'ERROR_UPDATE_TALK' ], 403);
+      next(error);
     }
   };
   
-  const deleteTalk = async (req, res) => {
+  const deleteTalk = async (req, res, next) => {
     if(!req.params.talkId) response.error(req, res, [ 'SEND_TALK_ID' ], 403);
     
     try {
@@ -103,7 +95,7 @@ function talksService(storeInjection) {
 
       response.success(req, res, [ 'DELETED' ], 200)
     } catch (error) {
-      response.error(req, res, [ 'CANT_DELETE_TALK' ], 403);
+      next(error);
     }
   };
 

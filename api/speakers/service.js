@@ -18,7 +18,7 @@ function speakerService(storeInjection) {
   const Controller = controller(store);
   const Events = events(eventsStore);
   
-  const registerSpeaker = async (req, res) => {
+  const registerSpeaker = async (req, res, next) => {
     const { body: data, params, file } = req;
 
     try {
@@ -45,7 +45,7 @@ function speakerService(storeInjection) {
       response.success(req, res, newSpeaker, 201)
 
     } catch (error) {
-      return error
+      next(error);
     }
   };
 
@@ -58,11 +58,7 @@ function speakerService(storeInjection) {
       if (!speakers) response.error(req, res, [ 'NO_SPEAKERS' ], 400);
       response.success(req, res, speakers, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.eventId,
-            msg: 'Incorrect data error',
-            param: 'eventId'
-      }]}))
+      next(error);
     }
   }
 
@@ -73,15 +69,11 @@ function speakerService(storeInjection) {
       if (!speakers) response.error(req, res, [ 'NO_SPEAKERS' ], 400);
       response.success(req, res, speakers, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.speakerId,
-            msg: 'Incorrect data error',
-            param: 'eventId'
-      }]}))
+      next(error);
     }
   }
 
-  const updateSpeaker = async (req, res) => {
+  const updateSpeaker = async (req, res, next) => {
     const { body: data, file, params } = req;
   
     try {
@@ -96,11 +88,11 @@ function speakerService(storeInjection) {
 
       response.success(req, res, speaker, 200);
     } catch (error) {
-      response.error(req, res, [ 'ERROR_UPDATE_SPEAKER' ], 403);
+      next(error);
     }
   }
   
-  const deleteSpeaker = async (req, res) => {
+  const deleteSpeaker = async (req, res, next) => {
     if(!req.params.speakerId) response.error(req, res, [ 'SEND_SPEAKER_ID' ], 403);
     
     try {
@@ -109,7 +101,7 @@ function speakerService(storeInjection) {
 
       response.success(req, res, [ 'DELETED' ], 200)
     } catch (error) {
-      response.error(req, res, [ 'CANT_DELETE_SPEAKER' ], 403);
+      next(error);
     }
   }
 

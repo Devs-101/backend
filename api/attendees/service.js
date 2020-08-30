@@ -8,7 +8,7 @@ function attendeesService(storeInjection) {
 
   const Controller = controller(storeInjection)
 
-  const registerAttendees = async (req, res) => {
+  const registerAttendees = async (req, res, next) => {
     const { body: data } = req;
     const { params } = req;
 
@@ -17,22 +17,18 @@ function attendeesService(storeInjection) {
       const newAttendee = await Controller.createAttendee(data)
       response.success(req, res, newAttendee, 201);
     } catch (error) {
-      return res.status(400).send({
-        success: true,
-        errors: error.errors,
-        route: 'createAttendees'
-      });
+      next(error);
     }
   }
   
-  const getAllAttendees = async (req, res) => {
+  const getAllAttendees = async (req, res, next) => {
     const { params } = req;
 
     try {
       const attendees = await Controller.getAttendees(params.eventId);
       response.success(req, res, attendees, 201);
     } catch (error) {
-      return response.error(req, res, [ 'ERROR_GETTING_ATTENDEES' ])
+      next(error);
     }
   }
 
