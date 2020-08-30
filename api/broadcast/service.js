@@ -9,7 +9,7 @@ function broadcastService(storeInjection) {
 
   const Controller = controller(store)
   
-  const updateBroadcast = async (req, res) => {
+  const updateBroadcast = async (req, res, next) => {
     const { body: data } = req;
     const { params: params } = req;
     
@@ -30,17 +30,17 @@ function broadcastService(storeInjection) {
         );
       }
     } catch (error) {
-      console.log(error)
+      next(error);
     }
   };
 
-  const getBroadcast = async (req, res) => {
+  const getBroadcast = async (req, res, next) => {
     const { params } = req;
     try {
       const broadcast = await Controller.getBroadcast(params.eventId);
       response.success(req, res, broadcast, 200);
     } catch (error) {
-      response.error(req, res, error.errors, 400)
+      next(error);
     }
   };
 

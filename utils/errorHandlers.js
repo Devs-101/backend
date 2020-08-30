@@ -1,53 +1,32 @@
 const boom = require('@hapi/boom');
 const response = require('./responses')
-/*
-const Sentry = require("@sentry/node");
-const { sentry, dev } = require('../../config/index');
+const Sentry = require('@sentry/node');
+const { SENTRY_DNS, SENTRY_ID } = require('../config/index');
 
-if (sentry.sentryDns && sentry.sentryId) {
-  Sentry.init({ dsn: `https://${sentry.sentryDns}@o416099.ingest.sentry.io/${sentry.sentryId}` });
-}
-*/
-function withErrorStack(error, stack) {
-  /*
-  if (dev) {
-    return { ...error, stack };
-  }
-  */
-
-  return { ...error };
-}
+if (SENTRY_DNS && SENTRY_ID) Sentry.init({ dsn: `https://${SENTRY_DNS}@o410557.ingest.sentry.io/${SENTRY_ID}` });
 
 function logErrors(err, req, res, next) {
-  //Sentry.captureException(err);
+  Sentry.captureException(err);
   next(err);
 }
 
 function wrapErrors(err, req, res, next) {
-  if (!err.isBoom) {
-    // console.log('wrapError', err)
-    next(response.json({
-      error: 'Internal Server Error',
-      data: false,
-      status: 500
-    }));
-  }
-
+  if (!err.isBoom) next(boom.badImplementation(err));
   next(err);
 }
 
 function errorHandler(err, req, res, next) { // eslint-disable-line
   const {
     output: { statusCode, payload }
-  } = err;
-  
-  console.log('errorHandler', payload.message)
-  res.json(withErrorStack(payload, err.stack));
+  } = boom.internal();
+  res.status(statusCode);
+  res.json({ status: statusCode, error: payload.error, message: payload.message, data: false });
 }
+
 
 function notFoundHandler(req, res) {
   const { output: 
-      { statusCode, payload } 
+    { statusCode, payload } 
   } = boom.notFound();
 
   response.error(req, res, payload.message, statusCode)

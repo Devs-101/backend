@@ -18,7 +18,7 @@ function sponsorService(storeInjection) {
   const Controller = controller(store);
   const Events = events(eventsStore);
 
-  const registerSponsor = async (req, res) => {
+  const registerSponsor = async (req, res, next) => {
     const { body: data, params, file } = req;
 
     try {
@@ -45,7 +45,7 @@ function sponsorService(storeInjection) {
       response.success(req, res, newSponsor, 201)
 
     } catch (error) {
-      return error
+      next(error);
     }
   };
 
@@ -55,11 +55,7 @@ function sponsorService(storeInjection) {
       const sponsors = await Controller.getSponsors(req.params.eventId);
       response.success(req, res, sponsors, 200);
     } catch (error) {
-          next(res.send({error: [{
-            value: req.params.eventId,
-            msg: 'Incorrect data error',
-            param: 'eventId'
-      }]}))
+      next(error);
     }
   }
 
@@ -69,15 +65,11 @@ function sponsorService(storeInjection) {
   
       response.success(req, res, sponsors, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.sponsorId,
-            msg: 'Incorrect data error',
-            param: 'sponsorId'
-      }]}))
+      next(error);
     }
   }
 
-  const updateSponsor = async (req, res) => {
+  const updateSponsor = async (req, res, next) => {
     const { body: data, file, params } = req;
   
     try {
@@ -92,11 +84,11 @@ function sponsorService(storeInjection) {
 
       response.success(req, res, sponsor, 200);
     } catch (error) {
-      response.error(req, res, [ 'ERROR_UPDATE_SPONSOR' ], 403);
+      next(error);
     }
   }
 
-  const deleteSponsor = async (req, res) => {
+  const deleteSponsor = async (req, res, next) => {
     if(!req.params.sponsorId) response.error(req, res, [ 'SEND_SPONSOR_ID' ], 403);
     
     try {
@@ -105,7 +97,7 @@ function sponsorService(storeInjection) {
 
       response.success(req, res, [ 'DELETED' ], 200)
     } catch (error) {
-      response.error(req, res, [ 'CANT_DELETE_SPONSOR' ], 403);
+      next(error);
     }
   }
 

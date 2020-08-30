@@ -44,7 +44,7 @@ function organizatorService(storeInjection) {
       response.success(req, res, newOrganizator, 201)
 
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -57,7 +57,7 @@ function organizatorService(storeInjection) {
       if (!organizators) response.error(req, res, [ 'NO_ORGANIZATORS' ], 400);
       response.success(req, res, organizators, 200);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -68,7 +68,7 @@ function organizatorService(storeInjection) {
       if (!organizator) response.error(req, res, [ 'NO_SPEAKERS' ], 400);
       response.success(req, res, organizator, 200);
     } catch (error) {
-        next(error)
+      next(error);
     }
   }
 
@@ -87,7 +87,7 @@ function organizatorService(storeInjection) {
 
       response.success(req, res, organizator, 200);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -100,7 +100,7 @@ function organizatorService(storeInjection) {
 
       response.success(req, res, [ 'DELETED' ], 200)
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 

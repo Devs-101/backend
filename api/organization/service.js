@@ -9,28 +9,28 @@ function organizationService(storeInjection) {
 
   const Controller = controller(store)
   
-  const registerOrganization = async (req, res) => {
+  const registerOrganization = async (req, res, next) => {
     const { body: data } = req;
 
     try {
       const register = await Controller.registerOrganization(data);
       response.success(req, res, register, 201);
     } catch (error) {
-      response.error(req, res, error, 422);
+      next(error);
     }
   };
 
-  const getAllOrganizations = async (req, res) => {
+  const getAllOrganizations = async (req, res, next) => {
     const { params } = req;
     try {
       const organizations = await Controller.getOrganizations(params.userId)
       response.success(req, res, organizations, 201);
     } catch (error) {
-      response.error(req, res, error.errors, 400)
+      next(error);
     }
   };
 
-  const getOrganization = async (req, res) => {
+  const getOrganization = async (req, res, next) => {
     const { params } = req;
 
     try {
@@ -44,11 +44,11 @@ function organizationService(storeInjection) {
         }], 400)
       }
     } catch (error) {
-      response.error(req, res, error.errors, 400)
+      next(error);
     }
   };
 
-  const updateOrganization = async (req, res) => {
+  const updateOrganization = async (req, res, next) => {
     const { params } = req;
     const { body: data } = req;
 
@@ -61,11 +61,11 @@ function organizationService(storeInjection) {
 
       response.success(req, res, organizations, 200);
     } catch (error) {
-      response.error(req, res, error.errors, 400)
+      next(error);
     }
   };
 
-  const deleteOrganization = async (req, res) => {
+  const deleteOrganization = async (req, res, next) => {
     const { params } = req;
 
     try {
@@ -78,7 +78,7 @@ function organizationService(storeInjection) {
         
       response.success(req, res, organizations, 201);
     } catch (error) {
-      response.error(req, res, error.errors, 400)
+      next(error);
     }
   };
 

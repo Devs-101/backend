@@ -19,7 +19,7 @@ function authService(storeInjection) {
 
   const { JWT_SECRET } = require('../../config/index');
 
-  const register = async (req, res) => {
+  const register = async (req, res, next) => {
     const { body: data } = req;
 
     if(data.password !== data.confirm_password) {
@@ -52,12 +52,12 @@ function authService(storeInjection) {
         //await sendWelcomeEmail(newUser);
         response.success(req, res, { user: newUser, organization: newOrganization, token }, 201);
       } catch (error) {
-        return error
+        next(error);
       }
     }
   }
 
-  const login = async (req, res) => {
+  const login = async (req, res, next) => {
     const { body: data } = req;
 
     try {
@@ -71,11 +71,11 @@ function authService(storeInjection) {
 
       response.success(req, res, { auth: true, token }, 200);
     } catch (error) {
-      return error
+      next(error);
     }
   }
 
-  const me = async (req, res) => {
+  const me = async (req, res, next) => {
 
     try {
       const user = await Controller.getUserById(req.body.userId);
@@ -87,7 +87,7 @@ function authService(storeInjection) {
       response.success(req, res, { user, organization }, 200);
       
     } catch (error) {
-      res.send('Error');
+      next(error);
     }
   }
 
