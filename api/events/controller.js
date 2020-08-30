@@ -10,8 +10,8 @@ module.exports = function (injectedStore) {
     return newEvent
   }
 
-  async function getEvents() {
-    const items = await store.find();
+  async function getEvents(organizationId) {
+    const items = await store.find({ organizationId });
     return items || false;
   }
 

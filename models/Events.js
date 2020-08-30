@@ -83,6 +83,8 @@ const eventsSchema = new Schema({
 
 
 eventsSchema.pre('save', async function(next) {
+  if(!this.slug) this.slug = ''
+
   const { name, slug } = await getUniqueSlug(this.name, this.slug, models.Events)
   this.name = name
   this.slug = slug

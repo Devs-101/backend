@@ -20,7 +20,7 @@ function eventsService(storeInjection) {
   const Controller = controller(store)
   const Organization = organization(organizationStore)
   
-  const registerEvent = async (req, res) => {
+  const registerEvent = async (req, res, next) => {
     const { body: data, params, file } = req;
     
     try {
@@ -50,8 +50,10 @@ function eventsService(storeInjection) {
   };
 
   const getAllEvents = async (req, res, next) => {
+    const { params: params } = req;
+
     try {
-      const events = await Controller.getEvents();
+      const events = await Controller.getEvents(params.organizationId);
       response.success(req, res, events, 201);
     } catch (error) {
       next(error);
@@ -71,7 +73,7 @@ function eventsService(storeInjection) {
   }
 
 
-  const updateEvent = async (req, res) => {
+  const updateEvent = async (req, res, next) => {
     const { body: data, params, file } = req;
   
     try {
