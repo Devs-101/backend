@@ -32,7 +32,6 @@ class Users {
   }
 
   static findById(userId) {
-    console.log(userId._id);
     return usersInfo.filter(item => item._id == userId._id)[0];
   }
 }
