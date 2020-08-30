@@ -18,7 +18,7 @@ function organizatorService(storeInjection) {
   const Controller = controller(store);
   const Events = events(eventsStore);
 
-  const registerOrganizator = async (req, res) => {
+  const registerOrganizator = async (req, res, next) => {
     const { body: data, params, file } = req;
 
     try {
@@ -30,7 +30,6 @@ function organizatorService(storeInjection) {
         }], 400);
 
       data.eventId = findEvent._id;
-
       data.img = defaultImages.organizators;
       if (file) {
         const avatarImg = await cloudinary.v2.uploader.upload(file.path);
@@ -38,14 +37,14 @@ function organizatorService(storeInjection) {
         await fs.unlink(file.path);
       }
 
-      const newOrganizator = await Controller.registerSpeaker(data);
+      const newOrganizator = await Controller.registerOrganizator(data);
 
       if(!newOrganizator) response.error(req, res, [ 'NO_SAVE_ORGANIZATOR' ], 403);
 
       response.success(req, res, newOrganizator, 201)
 
     } catch (error) {
-      return error
+      next(error)
     }
   }
 
@@ -58,30 +57,22 @@ function organizatorService(storeInjection) {
       if (!organizators) response.error(req, res, [ 'NO_ORGANIZATORS' ], 400);
       response.success(req, res, organizators, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.eventId,
-            msg: 'Incorrect data error',
-            param: 'eventId'
-      }]}))
+      next(error)
     }
   }
 
   const getOrganizator = async (req, res, next) => {
     try {
-      const organizator = await Controller.getOrganizator(req.params.speakerId);
+      const organizator = await Controller.getOrganizator(req.params.organizatorId);
   
       if (!organizator) response.error(req, res, [ 'NO_SPEAKERS' ], 400);
       response.success(req, res, organizator, 200);
     } catch (error) {
-        next(res.send({error: [{
-            value: req.params.organizatorId,
-            msg: 'Incorrect data error',
-            param: 'organizatorId'
-      }]}))
+        next(error)
     }
   }
 
-  const updateOrganizator = async (req, res) => {
+  const updateOrganizator = async (req, res, next) => {
     const { body: data, file, params } = req;
   
     try {
@@ -96,11 +87,11 @@ function organizatorService(storeInjection) {
 
       response.success(req, res, organizator, 200);
     } catch (error) {
-      response.error(req, res, [ 'ERROR_UPDATE_ORGANIZATOR' ], 403);
+      next(error)
     }
   }
 
-  const deleteOrganizator = async (req, res) => {
+  const deleteOrganizator = async (req, res, next) => {
     if(!req.params.organizatorId) response.error(req, res, [ 'SEND_ORGANIZATOR_ID' ], 403);
     
     try {
@@ -109,7 +100,7 @@ function organizatorService(storeInjection) {
 
       response.success(req, res, [ 'DELETED' ], 200)
     } catch (error) {
-      response.error(req, res, [ 'CANT_DELETE_ORGANIZATOR' ], 403);
+      next(error)
     }
   }
 

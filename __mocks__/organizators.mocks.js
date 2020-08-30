@@ -33,12 +33,20 @@ class Organizator {
   }
 
   static findOneAndUpdate({ _id }, data) {
-    return data
+    const updated = organizatorsInfo.filter(item => item._id == _id)[0];
+
+    if(updated) return data
+
+    return false
   }
 
   static deleteOne({ _id }) {
+    const deleted = organizatorsInfo.filter(item => item._id == _id)[0];
+
+    if(deleted) return { deletedCount: 1 }
+
     return {
-      deletedCount: 1
+      deletedCount: 0
     }
   }
 

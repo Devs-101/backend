@@ -107,12 +107,12 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
       });
     });
 
-    xit(`[POST] /register return true`, function(done) {
+    it(`[POST] /register return true`, function(done) {
       const register = {
         email: 'raziel.carvajal@onevent.xyz',
         password: '123456',
         confirm_password: '123456',
-        user_name: 'Raziel Carvajal',
+        name: 'Raziel Carvajal',
         organization_name: 'Devs 101'
       }
       request.post(`${baseRoute}/register`)
