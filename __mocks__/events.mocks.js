@@ -93,7 +93,6 @@ class Events {
   }
 
   static findOne(_id) {
-    console.log(_id)
     _id._id ? _id = _id._id : null
     return eventsInfo.filter(item => item._id === _id)[0];
   }
