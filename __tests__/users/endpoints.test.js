@@ -26,13 +26,13 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
   describe(`Routes ${baseMock}`, function () {
 
     it(`[GET] Should return an user of ${baseMock}`, function(done) {
-      request.get(`${baseRoute}/${userId}`)
+      request.get(`${baseRoute}/${userId}/get`)
         .set('x-access-token', token)
         .end((err, res) => {
         expect(res.body).toMatchObject({
-          error: expect.any(String),
+          error: expect.any(Boolean),
           status: expect.any(Number),
-          data: expect.any(Array)
+          data: expect.any(Object)
         });
         done();
       });
