@@ -49,7 +49,7 @@ function authService(storeInjection) {
 
         const token = jwt.sign({id: newUser._id}, JWT_SECRET, { expiresIn: 60 * 60 * 24 })
 
-        //await sendWelcomeEmail(newUser);
+        await sendWelcomeEmail(newUser);
         response.success(req, res, { user: newUser, organization: newOrganization, token }, 201);
       } catch (error) {
         next(error);

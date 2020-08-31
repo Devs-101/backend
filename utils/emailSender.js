@@ -15,14 +15,11 @@ const sendWelcomeEmail = async (user) => {
   };
   sgMail.send(msg, (error, result) => {
     if (error) {
-      //console.log('e:::', error.response.body);
       return {
         success: false,
         error: error.response.body
       }
     }
-
-    //console.log('r:::', result);
     return true
   });
 }
