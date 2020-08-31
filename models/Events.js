@@ -59,9 +59,6 @@ const eventsSchema = new Schema({
   fullUrl: {
     type: String
   },
-  img: {
-    type: String
-  },
   bannerOrHeader: {
     isBanner: {
       // True is banner, false is header
