@@ -43,8 +43,8 @@ class Auth {
 
   save() {
     authInfo.push(this.data)
-    const item = this.findByID(this.data._id)
-    return item
+    const item = this.data
+    return item.data
   }
 }
 

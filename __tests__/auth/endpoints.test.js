@@ -109,6 +109,7 @@ describe(`[${baseMock}] ENDPOINTS`, function () {
 
     it(`[POST] /register return true`, function(done) {
       const register = {
+        _id: '5f489a94ec79ea2808e79e09',
         email: 'raziel.carvajal@onevent.xyz',
         password: '123456',
         confirm_password: '123456',
