@@ -89,6 +89,7 @@ You can see the demo live [oneevent.netlify.app/]().
 
 - [Backend Repository](https://github.com/Devs-101/backend.git)
 - [Frontend Repository](https://github.com/Devs-101/frontend.git)
+- [Mailserver Repository](https://github.com/Devs-101/Email-server.git)
 - [Design Guide](https://xd.adobe.com/view/e955008a-2a0c-42c1-a1b1-c6f05a68f595-bc06/)
 - [Documentation](https://www.notion.so/Devs-101-db477bd1b09741e9885381025d681ad4)
 - [Postman](https://documenter.getpostman.com/view/5657909/TVCY6C5f)
