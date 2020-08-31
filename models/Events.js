@@ -21,8 +21,7 @@ const eventsSchema = new Schema({
     endDate: Date
   },
   theme: {
-    type: String,
-    // At the moment we accept just 2 omnitrix or cureness!
+    type: String
   },
   broadcast: {
     subject: {

@@ -16,6 +16,8 @@ const {
   errorHandler
 } = require('./utils/errorHandlers')
 
+
+//Routes Call
 const authRoutes = require('./api/auth/routes');
 const userRoutes = require('./api/user/routes');
 const broadcastRoutes = require('./api/broadcast/routes')
@@ -27,6 +29,7 @@ const speakerRoutes = require('./api/speakers/routes');
 const talkRoutes = require('./api/talks/routes');
 const organizatorRoutes = require('./api/organizators/routes');
 
+//Models Call
 const Attendees = require('./models/Attendees');
 const Events = require('./models/Events');
 const Organizations = require('./models/Organizations');
@@ -47,9 +50,8 @@ cloudinary.config({
   api_secret: API_SECRET
 });
 
-app.use(helmet())
-
 // Middlewares
+app.use(helmet())
 const storage = multer.diskStorage({
   destination: path.join(__dirname, 'public/img/upload'),
   // eslint-disable-next-line no-unused-vars
@@ -59,7 +61,7 @@ const storage = multer.diskStorage({
 })
 app.use(multer({ storage }).single('img'));
 
-// routes
+// Routes
 authRoutes(app, Users);
 userRoutes(app, User);
 broadcastRoutes(app, Events);

@@ -111,7 +111,6 @@ describe(`[${baseMock}] FUNCTIONS`, function () {
         organizationId: '5f42a2b78814a10955374ae4'
       };
       return Controller.registerEventSave(create).then((event) => {
-        // console.log('Event::', event.data)
         expect(event.data).toStrictEqual(create)
       });
     });
