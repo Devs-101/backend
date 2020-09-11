@@ -1,4 +1,7 @@
 const response = require('../../utils/responses');
+const cloudinary = require('cloudinary');
+const fs = require('fs-extra');
+const { defaultImages } = require('../../utils/defaultImages');
 
 function broadcastService(storeInjection) {
   const controller = require('./controller')
@@ -10,10 +13,16 @@ function broadcastService(storeInjection) {
   const Controller = controller(store)
   
   const updateBroadcast = async (req, res, next) => {
-    const { body: data } = req;
-    const { params: params } = req;
+    const { body: data, file, params } = req;
     
     try {
+      data.img = defaultImages.broadcast;
+      if (file) {
+        const avatarImg = await cloudinary.v2.uploader.upload(file.path);
+        data.img = avatarImg.secure_url;
+        await fs.unlink(file.path);
+      }
+
       const broadcast = await Controller.updateBroadcast(params.eventId, data);
   
       if (broadcast) {
