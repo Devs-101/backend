@@ -99,7 +99,6 @@ exports.validateTalk = [
 exports.validateBroadcast = [
   check('subject').not().isEmpty().withMessage('Subject is required').escape(),
   check('text').not().isEmpty().withMessage('Text is required').escape(),
-  check('img').isEmpty().withMessage('Image is required').escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
