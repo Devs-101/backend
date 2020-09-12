@@ -72,7 +72,6 @@ function eventsService(storeInjection) {
     }
   }
 
-
   const updateEvent = async (req, res, next) => {
     const { body: data, params, file } = req;
   
@@ -126,6 +125,40 @@ function eventsService(storeInjection) {
     }
   };
 
+  const readyForPublish = async (req, res, next) => {
+    const { params } = req;
+
+    try {
+      const event = await Controller.getEvent(params.eventId);
+      let checkComplete = []
+      if (event) {
+        if(!event.name) checkComplete.push('NO_EVENT_NAME')
+        if(!event.dateHour.initDate) checkComplete.push('NO_EVENT_START_DATE')
+        if(!event.img) checkComplete.push('NO_EVENT_LOGO')
+
+        if(!event.broadcast.subject) checkComplete.push('NO_EVENT_BROADCAST_SUBJECT')
+        if(!event.broadcast.text) checkComplete.push('NO_EVENT_BROADCAST_TEXT')
+        if(!event.broadcast.img) checkComplete.push('NO_EVENT_BROADCAST_IMG')
+
+        if(event.bannerOrHeader.isBanner) {
+          if(!event.bannerOrHeader.img) checkComplete.push('NO_EVENT_BANNER_IMAGE')
+        } else {
+          if(!event.bannerOrHeader.text) checkComplete.push('NO_EVENT_HEADER_IMAGE')
+        }
+
+        const data = {
+          eventId: params.eventId,
+          checkComplete
+        }
+        response.success(req, res, data, 200);
+      } else {
+        response.error(req, res, [ 'EVENT_NOT_FOUND' ], 400)
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
+
   const erase = async (req, res, next) => {
     const { params } = req;
 
@@ -143,6 +176,7 @@ function eventsService(storeInjection) {
     getEvent,
     updateEvent,
     publish,
+    readyForPublish,
     erase
   }
 }
