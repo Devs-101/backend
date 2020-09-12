@@ -9,7 +9,8 @@ const eventsSchema = new Schema({
   },
   description: {
     type: String,
-    trim: true
+    trim: true,
+    default: 'Description of event'
   },
   eventStatus: {
     type: Boolean,
@@ -35,12 +36,12 @@ const eventsSchema = new Schema({
     },
     img: {
       type: String,
-      default: 'image.png'
+      default: ''
     },
   },
   img: {
     type: String,
-    default: 'image.png'
+    default: ''
   },
   countDown: {
     type: Boolean,
@@ -61,9 +62,16 @@ const eventsSchema = new Schema({
     isBanner: {
       // True is banner, false is header
       type: Boolean,
+      default: true
     },
-    text: String,
-    img: String
+    text: {
+      type: String,
+      default: 'Banner Text'
+    },
+    img: {
+      type: String,
+      default: ''
+    }
   },
   deleted_at: {
     type: Date,
