@@ -6,10 +6,22 @@ const SpeakersSchema = new Schema({
     required: [true, 'The speaker name is require'],
     trim: true
   },
-  img: String,
-  twitter: String,
-  bio: String,
-  rol: String,
+  img: {
+    type: String,
+    trim: true
+  },
+  twitter: {
+    type: String,
+    trim: true
+  },
+  bio: {
+    type: String,
+    trim: true
+  },
+  rol: {
+    type: String,
+    trim: true
+  },
   eventId: {
     type: Schema.Types.ObjectId,
     ref: 'Events',
