@@ -21,7 +21,8 @@ const eventsSchema = new Schema({
     endDate: Date
   },
   theme: {
-    type: String
+    type: String,
+    default: null
   },
   broadcast: {
     subject: {
