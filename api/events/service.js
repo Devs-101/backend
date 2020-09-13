@@ -6,19 +6,34 @@ const { defaultImages } = require('../../utils/defaultImages');
 function eventsService(storeInjection) {
   const controller = require('./controller')
   const organization = require('../organization/controller');
+  const speaker = require('../speakers/controller');
+  const sponsor = require('../sponsors/controller');
+  const talk = require('../talks/controller');
 
   const Organizations = require('../../models/Organizations');
+  const Speakers = require('../../models/Speakers');
+  const Sponsors = require('../../models/Sponsors');
+  const Talks = require('../../models/Talks');
 
   let store = storeInjection;
   let organizationStore = Organizations
+  let speakersStore = Speakers
+  let sponsorsStore = Sponsors
+  let talksStore = Talks
 
   if (!store) {
     store = require('../../__mocks__/events.mocks').Events;
     organizationStore =  require('../../__mocks__/organizations.mocks').Organizations;
+    speakersStore =  require('../../__mocks__/speakers.mocks').Speakers;
+    sponsorsStore =  require('../../__mocks__/sponsors.mocks').Sponsors;
+    talksStore =  require('../../__mocks__/talks.mocks').Talks;
   }
 
   const Controller = controller(store)
   const Organization = organization(organizationStore)
+  const Speaker = speaker(speakersStore)
+  const Sponsor = sponsor(sponsorsStore)
+  const Talk = talk(talksStore)
   
   const registerEvent = async (req, res, next) => {
     const { body: data, params, file } = req;
@@ -91,7 +106,7 @@ function eventsService(storeInjection) {
   }
 
   const publish = async (req, res, next) => {
-    const { params } = req;
+    const { body: data, params } = req;
 
     try {
       const event = await Controller.getEvent(params.eventId);
@@ -114,7 +129,7 @@ function eventsService(storeInjection) {
         if(checkComplete.length > 0) {
           response.error(req, res, checkComplete, 400)
         } else {
-          const published = await Controller.publishEvent(event._id)
+          const published = await Controller.publishEvent(event._id, data.theme)
           response.success(req, res, published, 201);
         }
       } else {
@@ -148,7 +163,8 @@ function eventsService(storeInjection) {
 
         const data = {
           eventId: params.eventId,
-          checkComplete
+          checkComplete,
+          initDate: event.dateHour.initDate
         }
         response.success(req, res, data, 200);
       } else {
@@ -170,6 +186,28 @@ function eventsService(storeInjection) {
     }
   };
 
+  const getPublishedEvent = async (req, res, next) => {
+    const { params } = req;
+    try {
+      const event = await Controller.getEvent(params.eventId);
+      const eventSpeakers = await Speaker.getSpeakers(params.eventId);
+      const eventSponsors = await Sponsor.getSponsors(params.eventId);
+      const eventTalks = await Talk.getTalks(params.eventId);
+
+      const data = {
+        event,
+        speakers: eventSpeakers,
+        sponsors: eventSponsors,
+        talks: eventTalks
+      }
+  
+      if (!event) response.error(req, res, [ 'NO_EVENT' ], 400);
+      response.success(req, res, data, 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   return {
     registerEvent,
     getAllEvents,
@@ -177,6 +215,7 @@ function eventsService(storeInjection) {
     updateEvent,
     publish,
     readyForPublish,
+    getPublishedEvent,
     erase
   }
 }
