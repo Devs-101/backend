@@ -11,7 +11,7 @@ module.exports = function (injectedStore) {
   }
 
   async function getTalks(eventId) {
-    const items = await store.find({ eventId }).populate('speakerId');
+    const items = await store.find({ eventId }).sort({ initDate: 1 }).populate('speakerId');
     return items || false;
   }
 
