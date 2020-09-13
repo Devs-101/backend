@@ -49,6 +49,16 @@ exports.validateEvent = [
   }
 ]
 
+exports.validateEventPublish = [
+  check('theme').not().isEmpty().withMessage('Theme name is required').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(403).json({ errors: errors.array()})
+    next();
+  }
+]
+
 exports.validateOrganization = [
   check('name').not().isEmpty().withMessage('Organization name is required').escape(),
   (req, res, next) => {
