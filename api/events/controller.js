@@ -25,8 +25,8 @@ module.exports = function (injectedStore) {
     return item || false
   }
 
-  async function publishEvent(_id) {
-    const items = await store.findOneAndUpdate({ _id }, { eventStatus: true }, { new: true });
+  async function publishEvent(_id, theme) {
+    const items = await store.findOneAndUpdate({ _id }, { eventStatus: true, theme }, { new: true });
     return items || false;
   }
 
