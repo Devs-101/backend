@@ -88,14 +88,28 @@ function eventsService(storeInjection) {
   }
 
   const updateEvent = async (req, res, next) => {
-    const { body: data, params, file } = req;
-  
+    const { body: data, params, files } = req;
+
     try {
-      if(file) {
-        const avatarImg = await cloudinary.v2.uploader.upload(file.path);
-        data.img = avatarImg.secure_url;
-        await fs.unlink(file.path);
+      if(files) {
+        const { img, 'bannerOrHeader[img]': banner } = files
+        if(img) {
+          const avatarImg = await cloudinary.v2.uploader.upload(img[0].path, function (err) {
+            console.log(err)
+          });
+          data.img = avatarImg.secure_url;
+          await fs.unlink(img[0].path);
+        }
+
+        if(banner) {
+          const avatarImg = await cloudinary.v2.uploader.upload(banner[0].path, function (err) {
+            console.log(err)
+          });
+          data.bannerOrHeader.img = avatarImg.secure_url;
+          await fs.unlink(banner[0].path);
+        }
       }
+
       const event = await Controller.updateEvent(params.eventId, data);
       if(!event) response.error(req, res, [ 'ERROR_ON_UPDATE_EVENT' ], 400);
 
