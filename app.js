@@ -59,7 +59,7 @@ const storage = multer.diskStorage({
       cb(null, uuidv4() + path.extname(file.originalname))
   }
 })
-app.use(multer({ storage }).single('img'));
+app.use(multer({ storage }).fields([{ name: 'img', maxCount: 2 },  { name: 'bannerOrHeader[img]', maxCount: 1 }]));
 
 // Routes
 authRoutes(app, Users);

@@ -13,14 +13,17 @@ function broadcastService(storeInjection) {
   const Controller = controller(store)
   
   const updateBroadcast = async (req, res, next) => {
-    const { body: data, file, params } = req;
+    const { body: data, files, params } = req;
     
     try {
       data.img = defaultImages.broadcast;
-      if (file) {
-        const avatarImg = await cloudinary.v2.uploader.upload(file.path);
-        data.img = avatarImg.secure_url;
-        await fs.unlink(file.path);
+      if(files) {
+        const { img } = files
+        if(img) {
+          const avatarImg = await cloudinary.v2.uploader.upload(img[0].path);
+          data.img = avatarImg.secure_url;
+          await fs.unlink(img[0].path);
+        }
       }
 
       const broadcast = await Controller.updateBroadcast(params.eventId, data);

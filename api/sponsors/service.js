@@ -19,7 +19,7 @@ function sponsorService(storeInjection) {
   const Events = events(eventsStore);
 
   const registerSponsor = async (req, res, next) => {
-    const { body: data, params, file } = req;
+    const { body: data, params, files } = req;
 
     try {
       const findEvent = await Events.getEvent(params.eventId)
@@ -32,10 +32,13 @@ function sponsorService(storeInjection) {
       data.eventId = findEvent._id;
 
       data.img = defaultImages.sponsor;
-      if (file) {
-        const avatarImg = await cloudinary.v2.uploader.upload(file.path);
-        data.img = avatarImg.secure_url;
-        await fs.unlink(file.path);
+      if(files) {
+        const { img } = files
+        if(img) {
+          const avatarImg = await cloudinary.v2.uploader.upload(img[0].path);
+          data.img = avatarImg.secure_url;
+          await fs.unlink(img[0].path);
+        }
       }
 
       const newSponsor = await Controller.registerSponsor(data);
@@ -70,13 +73,16 @@ function sponsorService(storeInjection) {
   }
 
   const updateSponsor = async (req, res, next) => {
-    const { body: data, file, params } = req;
+    const { body: data, files, params } = req;
   
     try {
-      if (file) {
-        const avatarImg = await cloudinary.v2.uploader.upload(file.path);
-        data.img = avatarImg.secure_url;
-        await fs.unlink(file.path);
+      if(files) {
+        const { img } = files
+        if(img) {
+          const avatarImg = await cloudinary.v2.uploader.upload(img[0].path);
+          data.img = avatarImg.secure_url;
+          await fs.unlink(img[0].path);
+        }
       }
 
       const sponsor = await Controller.updateSponsor(params.sponsorId, data);
